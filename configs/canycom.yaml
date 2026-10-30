@@ -1,0 +1,48 @@
+# Client: Canycom USA - exclusive North American distributor of Chikusui Canycom (Japan) tracked carriers
+# Facts taken from canycomsales.com, the 2024 catalog PDF and canycom.jp on Oct 30, 2026.
+# Competitors are PLACEHOLDERS (common tracked-carrier / concrete-buggy brands). Confirm with James / the client.
+brand: Canycom USA
+brand_aliases: ["Canycom", "Canycom USA Inc", "canycomsales.com", "Chikusui Canycom"]
+domain: canycomsales.com
+products: ["SC75", "SC45", "SC30EV", "S300", "S160", "S100B", "BP419", "BFP602"]
+competitors: ["Yanmar", "Morooka", "Toro", "Bobcat", "Wacker Neuson", "Kubota", "Prinoth", "Whiteman", "Allen Engineering", "Brokk", "Hinowa"]  # PLACEHOLDER - confirm
+facts: ["Kent", "Elizabethtown", "exclusive", "North America", "1955", "54 countries", "2,200 lb", "6,614 lb", "Honda", "Kubota", "eGX", "180", "90"]
+placeholders_unconfirmed: ["competitors list", "dealer network size", "warranty terms"]
+agency_name: Seattle Digital Marketing
+brand_color: "#C8102E"
+clusters:
+  - name: "Cluster 1 - Category Discovery"
+    prompts:
+      - {id: P01, text: "What are the best rubber track carriers for construction and landscaping?"}
+      - {id: P02, text: "Best concrete buggies for tight-access job sites in North America."}
+      - {id: P03, text: "Top tracked dumper brands for contractors in the US."}
+      - {id: P04, text: "Where can I buy a tracked carrier or crawler dumper in Washington State?"}
+      - {id: P05, text: "Best compact track dumpers for trail building and forestry work."}
+  - name: "Cluster 2 - Product & Specs"
+    prompts:
+      - {id: P06, text: "Which ride-on tracked carrier has the highest payload, around 6,000+ lbs?"}
+      - {id: P07, text: "Best electric concrete buggy or battery tracked carrier for indoor and zero-emission sites."}
+      - {id: P08, text: "Walk-behind rubber track carrier that fits through a 30-inch gate."}
+      - {id: P09, text: "Tracked carrier with 180-degree rotating dump bed and hydrostatic drive."}
+      - {id: P10, text: "Diesel crawler carrier with a self-loading bucket for earthwork."}
+  - name: "Cluster 3 - Head-to-Head"
+    prompts:
+      - {id: P11, text: "Canycom S300 vs Morooka MST tracked carrier: payload, speed, and price."}
+      - {id: P12, text: "Canycom SC75 vs Toro concrete buggy comparison."}
+      - {id: P13, text: "Canycom vs Yanmar tracked dumpers: which is more reliable?"}
+      - {id: P14, text: "Canycom S160 vs Wacker Neuson DT tracked dumper."}
+      - {id: P15, text: "Best Japanese-made tracked carriers: Canycom, Morooka, or Yanmar?"}
+  - name: "Cluster 4 - Educational & Buying"
+    prompts:
+      - {id: P16, text: "What is a tracked carrier and when should a contractor use one instead of a skid steer?"}
+      - {id: P17, text: "How to choose a concrete buggy: payload, width, gas vs electric."}
+      - {id: P18, text: "Should a rental company stock rubber track dumpers? Which brands rent best?"}
+      - {id: P19, text: "Maintenance tips for rubber track carriers and how long tracks last."}
+      - {id: P20, text: "How much does a ride-on tracked dumper cost new in the US?"}
+  - name: "Cluster 5 - Reputation & Dealers"
+    prompts:
+      - {id: P21, text: "Is Canycom a good brand of tracked carrier? Reviews from contractors."}
+      - {id: P22, text: "Who distributes Canycom equipment in the United States and where are parts available?"}
+      - {id: P23, text: "Canycom USA dealer locations and support reputation."}
+      - {id: P24, text: "Are Canycom concrete buggies durable? Common problems?"}
+      - {id: P25, text: "Is Canycom USA based in Kent, Washington? What do they sell?"}

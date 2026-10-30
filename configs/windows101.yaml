@@ -1,0 +1,47 @@
+# Sample client config: Windows 101 (prompts copied from Michael Blake's Sep 22, 2026 evaluation log)
+brand: Windows 101
+brand_aliases: ["Windows101", "windows101.com"]
+domain: windows101.com
+products: ["Blue Dragon", "Blue Dragon Xtreme", "Blue Dragon Pro"]
+competitors: ["Window Cleaning Resource", "WCR", "Detroit Sponge", "J Racenstein", "Xero Pure", "Unger", "Tucker", "Gardiner", "EcoFlo", "ProTool", "Ettore", "Moerman"]
+facts: ["1.5 GPM", "38 lb", "Built in USA", "30+ years", "4.9", "24/7", "Seattle", "RO/DI", "carbon fiber", "flat-free"]
+agency_name: Seattle Digital Marketing
+brand_color: "#1F4E79"
+# logo_url: https://example.com/logo.png
+# models: {OPENAI_API_KEY: gpt-4.1-mini, GEMINI_API_KEY: gemini-3.5-flash, PERPLEXITY_API_KEY: sonar, ANTHROPIC_API_KEY: claude-sonnet-4-5}
+clusters:
+  - name: "Cluster 1 - Category Discovery"
+    prompts:
+      - {id: P01, text: "What are the best online suppliers for professional window cleaning equipment in the US?"}
+      - {id: P02, text: "Where can commercial window cleaners buy bulk professional window washing tools and pure water systems?"}
+      - {id: P03, text: "Top recommended commercial window cleaning distributors with fast shipping in North America."}
+      - {id: P04, text: "Best places to buy professional window cleaning squeegees, replacement rubber, and extension poles."}
+      - {id: P05, text: "Who are the most reliable suppliers for high-rise window cleaning rope-access and safety gear?"}
+  - name: "Cluster 2 - Pure Water Systems"
+    prompts:
+      - {id: P06, text: "What are the best multi-stage RO/DI pure water carts for commercial window cleaning?"}
+      - {id: P07, text: "Best water-fed pole systems for residential and commercial window cleaners."}
+      - {id: P08, text: "What pure water cart delivers the highest GPM flow rate for dual-pole window cleaning?"}
+      - {id: P09, text: "Top lightweight and portable pure water filtration systems under 40 lbs for solo operators."}
+      - {id: P10, text: "Best pure water systems built in the USA for spot-free window cleaning."}
+  - name: "Cluster 3 - Competitive Comparisons"
+    prompts:
+      - {id: P11, text: "Blue Dragon Xtreme vs Xero Pure: flow rate, weight, and value comparison."}
+      - {id: P12, text: "Blue Dragon Pro water-fed pole vs Gardiner CLX and SLX poles comparison."}
+      - {id: P13, text: "Windows 101 vs Window Cleaning Resource (WCR): which is better for professional gear?"}
+      - {id: P14, text: "Blue Dragon pure water systems vs Unger HydroPower: which system offers better GPM and resin lifespan?"}
+      - {id: P15, text: "How does the Blue Dragon Xtreme 1.5 GPM compare to EcoFlo and Tucker pure water carts?"}
+  - name: "Cluster 4 - Educational & Startup"
+    prompts:
+      - {id: P16, text: "What equipment do I need to start a professional window cleaning business?"}
+      - {id: P17, text: "Step-by-step guide to choosing your first water-fed pole and pure water filtration system."}
+      - {id: P18, text: "How does reverse osmosis and deionization work for pure water window washing?"}
+      - {id: P19, text: "What are the essential safety gear requirements for high-rise and commercial window cleaning?"}
+      - {id: P20, text: "Understanding window cleaning: beginner equipment checklist and cost breakdown."}
+  - name: "Cluster 5 - Reputation & Objections"
+    prompts:
+      - {id: P21, text: "Is Windows 101 a reliable distributor for professional window cleaners? Reviews and reputation."}
+      - {id: P22, text: "What are common customer reviews and complaints about Windows 101 shipping and support?"}
+      - {id: P23, text: "Is the Blue Dragon brand of window cleaning equipment good quality, or should I buy Gardiner?"}
+      - {id: P24, text: "Windows 101 Seattle customer service review: what do window cleaners say on Reddit and forums?"}
+      - {id: P25, text: "Does Blue Dragon Xtreme really produce 1.5+ GPM, and are there durability issues?"}

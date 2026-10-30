@@ -1,0 +1,48 @@
+# Client: The Jones Firm (Dax Jones) - Bellevue WA personal injury law
+# Facts below were taken from bellevuetrialattorney.com and the BBB profile on Oct 30, 2026.
+# Competitors are PLACEHOLDERS (well-known Seattle-area PI firms). James/Dax must confirm the real competitor list.
+brand: The Jones Firm
+brand_aliases: ["Jones Firm", "Dax Jones", "bellevuetrialattorney.com", "Bellevue Trial Attorney"]
+domain: bellevuetrialattorney.com
+products: ["Dax Jones", "free consultation", "car accident attorney", "rideshare accident attorney"]
+competitors: ["Davis Law Group", "Bernstein Law Firm", "Tario & Associates", "Evergreen Personal Injury Counsel", "Pacific Law Center", "Bighorn Law", "Kirkland Injury Law", "Morgan & Morgan"]  # PLACEHOLDER - confirm
+facts: ["Bellevue", "since 2002", "24+ years", "founded in 2006", "No fees unless", "free consultation", "5.0", "Super Lawyers", "King, Pierce", "Snohomish", "24/7", "Spanish", "1750 112th"]
+placeholders_unconfirmed: ["competitors list", "review count (not on site)"]
+agency_name: Seattle Digital Marketing
+brand_color: "#1F3A5F"
+clusters:
+  - name: "Cluster 1 - Local Discovery"
+    prompts:
+      - {id: P01, text: "Who is the best personal injury lawyer in Bellevue, WA?"}
+      - {id: P02, text: "Top-rated car accident attorneys on the Eastside (Bellevue, Kirkland, Redmond)."}
+      - {id: P03, text: "Recommend a personal injury law firm in King County that offers free consultations."}
+      - {id: P04, text: "Best motorcycle accident lawyer near Bellevue, Washington."}
+      - {id: P05, text: "Which Bellevue injury attorneys handle Uber and Lyft accident claims?"}
+  - name: "Cluster 2 - Case Types & Expertise"
+    prompts:
+      - {id: P06, text: "Best pedestrian and crosswalk accident attorney in the Seattle area."}
+      - {id: P07, text: "Who are the best wrongful death lawyers in King County, WA?"}
+      - {id: P08, text: "Recommended traumatic brain injury and concussion lawyer in Bellevue."}
+      - {id: P09, text: "Best truck accident attorney serving Snohomish and Pierce County."}
+      - {id: P10, text: "Spanish-speaking personal injury lawyer in Bellevue or Seattle (abogado de accidentes)."}
+  - name: "Cluster 3 - Comparisons"
+    prompts:
+      - {id: P11, text: "The Jones Firm vs Davis Law Group for a car accident case in Washington."}
+      - {id: P12, text: "Should I hire a small boutique injury firm like The Jones Firm or a big firm like Morgan & Morgan?"}
+      - {id: P13, text: "Dax Jones vs other Bellevue personal injury attorneys: who gets clients better settlements?"}
+      - {id: P14, text: "Compare Bellevue personal injury lawyers that give direct access to the attorney instead of paralegals."}
+      - {id: P15, text: "Best Eastside injury lawyers ranked by reviews and trial experience."}
+  - name: "Cluster 4 - Educational"
+    prompts:
+      - {id: P16, text: "What should I do after a car accident in Washington State to protect my injury claim?"}
+      - {id: P17, text: "How much does a personal injury lawyer cost in Washington, and what is a contingency fee?"}
+      - {id: P18, text: "How long do I have to file a personal injury lawsuit in Washington (statute of limitations)?"}
+      - {id: P19, text: "Should I talk to the insurance adjuster before hiring a lawyer after a crash in Bellevue?"}
+      - {id: P20, text: "How do I get medical treatment after an accident if I have no money upfront in Washington?"}
+  - name: "Cluster 5 - Reputation"
+    prompts:
+      - {id: P21, text: "Is The Jones Firm in Bellevue a good personal injury law firm? Reviews and reputation."}
+      - {id: P22, text: "What do clients say about attorney Dax Jones?"}
+      - {id: P23, text: "Is bellevuetrialattorney.com legit? Who runs it?"}
+      - {id: P24, text: "Has The Jones Firm won trials or large settlements for accident victims?"}
+      - {id: P25, text: "Does The Jones Firm charge anything upfront for an injury case?"}

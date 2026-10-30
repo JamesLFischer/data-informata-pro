@@ -1,0 +1,16 @@
+# Copy to configs/<slug>.yaml, then: ./run.sh <slug>
+# Put only VERIFIED claims in `facts` (they drive the citation-accuracy score).
+# List anything unverified under placeholders_unconfirmed so the CLI warns you.
+brand: Client Name
+brand_aliases: []
+domain: example.com
+products: []
+competitors: []
+facts: []
+placeholders_unconfirmed: []
+agency_name: Seattle Digital Marketing
+brand_color: "#1F4E79"
+clusters:   # 5 clusters x 5 prompts = 25 (Blake suggests 30-50)
+  - name: "Cluster 1 - Category Discovery"
+    prompts:
+      - {id: P01, text: "..."}

@@ -1,0 +1,17 @@
+# secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+secrets/
+# local
+.venv/
+__pycache__/
+*.pyc
+# raw run data (full AI answers, logs, xlsx) stays local; publish via docs/ only
+output/
+
+# dashboard asks (may contain client questions)
+inbox/
+private_site/
