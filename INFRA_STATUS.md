@@ -60,3 +60,8 @@ Without OpenAI/Anthropic credit, scoring falls back to rule-based (no LLM judge)
 - Shipped: encrypted ntfy.sh relay (`aivis/relay.py`, `./relay.sh`), wired into `docs/index.html`. Verified on the live Pages site in a real browser: wrong password rejected, correct password signs in, Windows 101 metrics load, ask posted and auto-answered (test ask deleted afterwards).
 - Profound Bot loop unchanged: `./asks.sh list` → `./asks.sh answer <id> "..."` → reply shows in the site chat within ~30s.
 - Limits: relay worker must stay running (stops if the box restarts — restart `./relay.sh`, or add a routine/watchdog). ntfy.sh public server has rate limits (fine for a few staff, not heavy use). Questions aren't pushed into Profound Bot's chat; it checks `./asks.sh list` (routine recommended). Answers to judgment questions wait for the bot.
+
+## Relay operations (Oct 30, 3:51 PM PT)
+- The relay MUST stay up or site sign-in shows "SDM box is offline". `relay_keepalive.sh` (running in background) calls `relay_watchdog.sh` every 60s and restarts `./relay.sh` if it's gone (log: /tmp/aivis_relay_watchdog.log). There's no cron on the box; where cron exists use `*/2 * * * * <repo>/relay_watchdog.sh`.
+- After a box reboot nothing auto-starts: run `nohup ./relay_keepalive.sh >/dev/null 2>&1 &` (a Grok Bot routine can do this).
+- Profound Bot must poll `./asks.sh list` (routine every 10–15 min recommended) and reply with `./asks.sh answer <id> "..."`. Verified Oct 30: relay ask → inbox → bot answer → visible via relay.
