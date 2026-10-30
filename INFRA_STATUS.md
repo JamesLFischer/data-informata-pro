@@ -45,3 +45,12 @@ Without OpenAI/Anthropic credit, scoring falls back to rule-based (no LLM judge)
 - Git history squashed to one clean commit before first push; output/, inbox/, private_site/, keys never published.
 - Box needs a tunnel for the public site to reach the API. A quick tunnel's URL changes on restart and stops if the box restarts → a named Cloudflare tunnel on an SDM domain is the durable fix (James: Cloudflare account + domain).
 - Client configs (prompt sets, competitor lists) ARE public in configs/. Move them out if they're sensitive.
+
+### BLOCKER: public site can't reach the API yet (Oct 30, 3:42 PM PT)
+- Tried a Cloudflare quick tunnel from the box: the box's network blocks outbound TCP 7844 and QUIC, so no tunnel connects. The server and tunnel were stopped, and `docs/config.js` stays empty.
+- Result: the public site shows the shell + sign-in form, and sign-in fails with "API not reachable". Client data is not exposed anywhere.
+- Fix options (James picks one):
+  1. Run `./serve.sh` + `cloudflared tunnel` on a machine whose network allows Cloudflare tunnels (an SDM PC/server), with the repo + `output/` synced there. Asks then land in that machine's `inbox/`, which Profound Bot can't read from the box without syncing.
+  2. Ask Grok Bot support to allow outbound tunnel traffic (TCP 7844) from the box — keeps everything on the box (best fit).
+  3. Deploy the API to a small host (Fly/Render) with the outputs and a shared inbox store (more work; v2).
+- Once a stable tunnel URL exists: set `window.AIVIS_API_BASE` in `docs/config.js` and push.
