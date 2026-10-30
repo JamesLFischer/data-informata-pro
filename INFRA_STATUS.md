@@ -65,3 +65,6 @@ Without OpenAI/Anthropic credit, scoring falls back to rule-based (no LLM judge)
 - The relay MUST stay up or site sign-in shows "SDM box is offline". `relay_keepalive.sh` (running in background) calls `relay_watchdog.sh` every 60s and restarts `./relay.sh` if it's gone (log: /tmp/aivis_relay_watchdog.log). There's no cron on the box; where cron exists use `*/2 * * * * <repo>/relay_watchdog.sh`.
 - After a box reboot nothing auto-starts: run `nohup ./relay_keepalive.sh >/dev/null 2>&1 &` (a Grok Bot routine can do this).
 - Profound Bot must poll `./asks.sh list` (routine every 10–15 min recommended) and reply with `./asks.sh answer <id> "..."`. Verified Oct 30: relay ask → inbox → bot answer → visible via relay.
+
+## Status: infrastructure COMPLETE except James-only items (Oct 30, 4:05 PM PT)
+See COMPLETION_CHECKLIST.md. New: Perplexity baseline runs for all 3 clients ($0.14), relay heartbeat + stale-restart watchdog, month-over-month deltas + date/engine filters (aivis/history.py), `./asks.sh pending` (exit 3 when questions wait) for routines.

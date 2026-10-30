@@ -139,3 +139,6 @@ Total is about $3-5 per 25-prompt run, or roughly $6-10 for 50 prompts. Profound
 
 ### Profound Bot side
 `./asks.sh list | context <slug> | answer <id> "text"` — answers show up in the site chat within 20s.
+
+
+See **COMPLETION_CHECKLIST.md** for what's done and what only James can do.

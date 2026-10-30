@@ -84,7 +84,17 @@ def write_all(cfg, results, outdir, example=False):
         for row in ws.iter_rows(): [setattr(c, "alignment", Alignment(wrap_text=True, vertical="top")) for c in row]
         ws.freeze_panes = ws.cell(row=3 if example else 2, column=1)
     wb.save(p["tracker.xlsx"])
-    with open(p["report.html"], "w") as f: f.write(render_html(cfg, results, dash, example, (sov_cols, sov)))
+    mom = None
+    if not example and not outdir.rstrip("/").endswith("_SMOKE"):
+        from . import history as H
+        prev, basis = H.previous_run(os.path.dirname(os.path.abspath(outdir)), H.run_time(outdir) or datetime.datetime.now())
+        if prev:
+            cur = {H.canon(d[0]): {"n": d[1], "som": H._pct(d[5]), "mentions": round(100 * d[2] / d[1], 1), "top1": round(100 * d[3] / d[1], 1),
+                                   "sentiment": H._pct(d[6]), "fidelity": H._pct(d[7])} for d in dash if d[1]}
+            mom = {"baseline": os.path.basename(prev), "basis": basis, "rows": H.deltas(cur, H.metrics(prev))}
+        else: mom = {"baseline": None, "basis": "first run - no baseline yet", "rows": []}
+        p["mom.json"] = os.path.join(outdir, "mom.json"); json.dump(mom, open(p["mom.json"], "w"), indent=1)
+    with open(p["report.html"], "w") as f: f.write(render_html(cfg, results, dash, example, (sov_cols, sov), mom))
     chrome = shutil.which("google-chrome") or shutil.which("chromium")
     if chrome:
         subprocess.run([chrome, "--headless", "--no-sandbox", "--disable-gpu", "--no-pdf-header-footer",
@@ -92,7 +102,23 @@ def write_all(cfg, results, outdir, example=False):
                        capture_output=True, timeout=120)
     return p
 
-def render_html(cfg, results, dash, example, sov=None):
+def mom_html(mom):
+    """Month-over-month section. Deltas are percentage points (pts for sentiment)."""
+    from .history import METRICS, fmt_delta
+    e = html.escape
+    if not mom: return ""
+    if not mom.get("baseline"): return "<h2>Change vs Last Month</h2><p class=muted>This is the first tracked run for this client &mdash; it becomes the baseline for next month's comparison.</p>"
+    cols = [m for m in METRICS]
+    head = "<tr><th>AI Engine</th>" + "".join(f"<th>{e(lab)}</th>" for _, lab, _, _ in cols) + "<th>Notes</th></tr>"
+    def cell(v):
+        col = "#1a7f37" if (v["delta"] or 0) > 0 else "#c62828" if (v["delta"] or 0) < 0 else "#555"
+        now = "&mdash;" if v["now"] is None else f"{v['now']:.1f}"
+        return f"<td>{now} <span style='color:{col}'>{e(fmt_delta(v['delta']))}</span></td>"
+    body = "".join(f"<tr><td>{e(r['engine'])}</td>" + "".join(cell(r[k]) for k, _, _, _ in cols) + f"<td>{e(r['note'])}</td></tr>" for r in mom["rows"])
+    return (f"<h2>Change vs Last Month</h2><p class=muted>Compared with run {e(mom['baseline'])} ({e(mom['basis'])}). Arrows show the change in percentage points "
+            "(sentiment in points). Rates are per prompt evaluated. Treat deltas flagged in Notes with caution.</p><table>" + head + body + "</table>")
+
+def render_html(cfg, results, dash, example, sov=None, mom=None):
     e = html.escape; color = cfg.get("brand_color", "#1F4E79"); agency = cfg.get("agency_name", "Seattle Digital Marketing")
     clusters = list(dict.fromkeys(r["cluster"] for r in results)); engines = [d[0] for d in dash]
     cl_rows = ""
@@ -125,6 +151,7 @@ table{{border-collapse:collapse;width:100%;margin:8px 0}}th{{background:{color};
 {banner}{scope}
 <h2>Executive Dashboard</h2><table><tr>{''.join(f'<th>{c}</th>' for c in ['AI Engine','Prompts','Mentions','#1 Recs','Top 3','Share of Model','Net Sentiment','Citation Fidelity'])}</tr>{dash_html}</table>
 <p class="muted">Share of Model = average position weight (#1 = 1.0, Top 3 = 0.7, incidental = 0.3, absent = 0). Net Sentiment averages the 0&ndash;100 score over all prompts (absent = 0).</p>
+{mom_html(mom)}
 {sov_html}
 <h2>Share of Model by Cluster</h2><table><tr><th>Cluster</th>{''.join(f'<th>{e(x)}</th>' for x in engines)}</tr>{cl_rows}</table>
 <h2>Visibility Gaps</h2><table><tr><th>ID</th><th>Engine</th><th>Prompt</th><th>Rank</th><th>Notes</th></tr>{gap_rows or '<tr><td colspan=5>No gaps found.</td></tr>'}</table>

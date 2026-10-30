@@ -3,19 +3,20 @@
 <style>body{font-family:system-ui,sans-serif;margin:0;background:#f5f7fa;color:#1a1a1a}header{background:#1F4E79;color:#fff;padding:22px 32px}
 main{padding:24px 32px;max-width:1100px}.card{background:#fff;border-radius:8px;padding:18px 22px;margin:0 0 18px;box-shadow:0 1px 3px #0002}
 table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:6px 8px;border-bottom:1px solid #e3e6ea;text-align:left}th{background:#eef2f6}
-.tag{font-size:12px;background:#fde7c4;padding:2px 6px;border-radius:4px}input,select,textarea,button{font:inherit;padding:6px}.hide{display:none}small{color:#666}</style></head>
+.tag{font-size:12px;background:#fde7c4;padding:2px 6px;border-radius:4px}input,select,textarea,button{font:inherit;padding:6px}.hide{display:none}small{color:#666}.pill{font-size:12px;padding:2px 8px;border-radius:10px;background:#eee}.ok{background:#d6f5df;color:#1a7f37}.bad{background:#fde2e2;color:#a00}.warn{background:#fff3cd;color:#7a5a00}.up{color:#1a7f37}.down{color:#c62828}.err{color:#a00}label{margin-right:10px;font-size:14px}</style></head>
 <body><header><h1>AI Search Visibility</h1><small style="color:#cfe">Seattle Digital Marketing · Share of Model tracking across ChatGPT, Gemini, Claude and Perplexity</small></header><main>
 <div class=card id=pub><h2>What this is</h2><p>SDM measures how often AI assistants mention and recommend a brand, versus its competitors, across a fixed monthly prompt set.
 Client dashboards and the Profound Bot chat are private and end-to-end encrypted. <b>SDM staff: sign in</b> with the team password.</p>
-<p><input id=api placeholder="API URL" size=40> <input id=pw type=password placeholder="Password"> <button id=login>Sign in</button> <small id=lerr></small></p></div>
+<p><input id=pw type=password placeholder="Password"> <button id=login>Sign in</button> <small id=lerr></small></p></div>
 <div id=app class=hide>
-<div class=card><select id=client></select> <button id=logout>Sign out</button> <small id=stat></small></div>
+<div class=card><select id=client></select> <button id=logout>Sign out</button> <span id=conn class=pill>…</span> <small id=stat></small></div>
+<div class=card><b>Filters</b> <label>From <input type=date id=ffrom></label><label>To <input type=date id=fto></label><span id=fengs></span>
+<button id=fapply>Apply</button> <button id=freset>Reset</button><br><small id=fnote>Filters apply to metrics, history, month-over-month and to questions you ask below.</small></div>
 <div class=card id=metrics></div>
-<div class=card><h2>Ask Profound Bot</h2><p><small>You get an instant answer built only from real run files. Questions that need judgment are queued for Profound Bot, whose reply appears here.</small></p>
-<input id=arange placeholder="date range (optional)"> <input id=afilt placeholder="filters (optional)"><br>
-<textarea id=aq rows=3 style="width:100%;margin-top:8px" placeholder="How is this client doing vs competitors?"></textarea><button id=asend>Ask</button><div id=alist></div></div></div>
+<div class=card><h2>Ask Profound Bot</h2><p><small>You get an instant answer built only from real run files (using the filters above). Questions that need judgment are queued for Profound Bot, whose reply appears here.</small></p>
+<textarea id=aq rows=3 style="width:100%;margin-top:8px" placeholder="How is this client doing vs competitors? What changed since last month?"></textarea><button id=asend>Ask</button> <small id=aerr class=err></small><div id=alist></div></div></div>
 </main><script>
-var $=function(i){return document.getElementById(i)},S=sessionStorage,R=window.AIVIS_RELAY,KEY=null;
+var $=function(i){return document.getElementById(i)},S=sessionStorage,R=window.AIVIS_RELAY,KEY=null,F={date_from:"",date_to:"",engines:[]},POLL=30000,pollT=null;
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function b64(u){var s="";u=new Uint8Array(u);for(var i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s)}
 function unb64(s){var b=atob(s),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
@@ -27,36 +28,71 @@ async function enc(o){var iv=crypto.getRandomValues(new Uint8Array(12)),z=await 
 async function dec(s){var b=unb64(s),p=await crypto.subtle.decrypt({name:"AES-GCM",iv:b.slice(0,12)},KEY,b.slice(12));
  return JSON.parse(new TextDecoder().decode(await pipe(p,new DecompressionStream("deflate"))))}
 var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms)})};
-async function relay(path,body){var id=Array.from(crypto.getRandomValues(new Uint8Array(12)),function(x){return x.toString(16).padStart(2,"0")}).join("");
- await fetch(R.ntfy+"/"+R.channel+"-req",{method:"POST",body:await enc({id:id,ts:Date.now(),path:path,body:body||{}})});
- for(var t=0;t<25;t++){await sleep(t<3?800:1500);
-  var txt=await (await fetch(R.ntfy+"/"+R.channel+"-r-"+id+"/json?poll=1&since=all")).text(),parts={},n=0;
-  txt.split("\n").forEach(function(l){if(!l)return;var m=JSON.parse(l);if(m.event!="message")return;var c=JSON.parse(m.message);parts[c.i]=c.d;n=c.n});
-  if(n&&Object.keys(parts).length==n){var s="";for(var i=0;i<n;i++)s+=parts[i];return dec(s)}}
- throw "timeout"}
-function api(path,body){return relay(path,body)}
+function E(kind,msg){var e=new Error(msg||kind);e.kind=kind;return e}
+function rid(){return Array.from(crypto.getRandomValues(new Uint8Array(12)),function(x){return x.toString(16).padStart(2,"0")}).join("")}
+async function post(topic,body){for(var t=0;t<3;t++){var r;try{r=await fetch(R.ntfy+"/"+topic,{method:"POST",body:body})}catch(e){await sleep(1000*(t+1));continue}
+  if(r.status==429)throw E("rate");if(r.ok)return;await sleep(1000*(t+1))}throw E("network")}
+// Wait for messages on a topic: one streaming request (light on ntfy rate limits); falls back to polling.
+async function waitTopic(topic,ms,done){var end=Date.now()+ms,ac=new AbortController(),timer=setTimeout(function(){ac.abort()},ms);
+ try{var r=await fetch(R.ntfy+"/"+topic+"/json?since=all",{signal:ac.signal});if(r.status==429)throw E("rate");
+  if(r.body&&r.body.getReader){var rd=r.body.getReader(),buf="",td=new TextDecoder();
+   while(true){var x=await rd.read();if(x.done)break;buf+=td.decode(x.value,{stream:true});var ls=buf.split("\n");buf=ls.pop();
+    for(var i=0;i<ls.length;i++){if(!ls[i])continue;var m=JSON.parse(ls[i]);if(m.event=="message"){var v=done(m.message);if(v!==undefined){ac.abort();return v}}}}}
+ }catch(e){if(e.kind)throw e;if(e.name!="AbortError"&&Date.now()<end){/* stream unsupported or dropped: poll */}else return undefined}finally{clearTimeout(timer)}
+ while(Date.now()<end){await sleep(1500);var r2;try{r2=await fetch(R.ntfy+"/"+topic+"/json?poll=1&since=all")}catch(e){continue}if(r2.status==429)throw E("rate");
+  var ls2=(await r2.text()).split("\n");for(var j=0;j<ls2.length;j++){if(!ls2[j])continue;var m2=JSON.parse(ls2[j]);if(m2.event=="message"){var v2=done(m2.message);if(v2!==undefined)return v2}}}
+ return undefined}
+async function relay(path,body){var id=rid(),parts={},n=0;
+ var w=waitTopic(R.channel+"-r-"+id,35000,function(msg){var c=JSON.parse(msg);parts[c.i]=c.d;n=c.n;if(n&&Object.keys(parts).length==n){var s="";for(var i=0;i<n;i++)s+=parts[i];return s}});
+ await post(R.channel+"-req",await enc({id:id,ts:Date.now(),path:path,body:body||{}}));
+ var s=await w;if(s===undefined)throw E("timeout");var out=await dec(s);setConn("ok");return out}
+// Liveness check that needs no password: is the box's relay worker answering at all?
+async function ping(){var id=rid(),w=waitTopic(R.channel+"-pong-"+id,12000,function(){return true});await post(R.channel+"-ping",id);return !!(await w)}
+function setConn(k,t){var c=$("conn");c.className="pill "+(k=="ok"?"ok":k=="warn"?"warn":"bad");c.textContent=t||(k=="ok"?"box online":k=="warn"?"reconnecting…":"box offline")}
+async function explain(e){if(e&&e.kind=="rate")return "Relay is rate-limiting this browser (too many requests). Wait about a minute and try again.";
+ var up=false;try{up=await ping()}catch(x){if(x.kind=="rate")return "Relay is rate-limiting this browser. Wait about a minute."}
+ return up?null:"The SDM box is offline (relay worker not answering). It usually restarts within 2 minutes; if not, ask Profound Bot to run ./relay_watchdog.sh."}
+async function api(path,body){try{return await relay(path,body)}catch(e){if(e.kind=="rate"){setConn("warn","rate-limited");throw e}
+  setConn("warn");try{return await relay(path,body)}catch(e2){var why=await explain(e2);setConn(why&&!/rate/.test(why)?"bad":"warn");e2.why=why||"Request timed out; the box is online, so please retry.";throw e2}}}
 function tbl(rows){if(!rows||!rows.length)return "<p><small>none</small></p>";var k=Object.keys(rows[0]);
  return "<table><tr>"+k.map(function(x){return "<th>"+esc(x)+"</th>"}).join("")+"</tr>"+rows.map(function(r){return "<tr>"+k.map(function(x){return "<td>"+esc(r[x])+"</td>"}).join("")+"</tr>"}).join("")+"</table>"}
-function show(cs){$("pub").classList.add("hide");$("app").classList.remove("hide");$("client").innerHTML=cs.map(function(c){return "<option>"+esc(c)+"</option>"}).join("");load()}
+function dl(v){if(v==null)return "—";return "<span class="+(v>0?"up":v<0?"down":"")+">"+(v>0?"▲ +":v<0?"▼ ":"● ")+v.toFixed(1)+"</span>"}
+function momHtml(m){if(!m)return "";if(!m.baseline)return "<h3>Change vs last month</h3><p><small>"+esc(m.basis)+"</small></p>";
+ var K=[["som","Share of Model"],["mentions","Mention rate"],["top1","#1 rec rate"],["sentiment","Net sentiment"],["fidelity","Citation fidelity"]];
+ return "<h3>Change vs last month</h3><p><small>"+esc(m.run)+" vs "+esc(m.baseline)+" ("+esc(m.basis)+"). Percentage points; sentiment in points.</small></p><table><tr><th>Engine</th>"+K.map(function(k){return "<th>"+k[1]+"</th>"}).join("")+"<th>Notes</th></tr>"+
+ m.rows.map(function(r){return "<tr><td>"+esc(r.engine)+"</td>"+K.map(function(k){var v=r[k[0]];return "<td>"+(v.now==null?"—":v.now.toFixed(1))+" "+dl(v.delta)+"</td>"}).join("")+"<td>"+esc(r.note)+"</td></tr>"}).join("")+"</table>"}
+function show(cs){$("pub").classList.add("hide");$("app").classList.remove("hide");setConn("ok");$("client").innerHTML=cs.map(function(c){return "<option>"+esc(c)+"</option>"}).join("");load()}
 function logout(){KEY=null;delete S.k;$("app").classList.add("hide");$("pub").classList.remove("hide")}
-function load(){var c=$("client").value;$("stat").textContent="loading…";
- api("context",{client:c}).then(function(x){var L=x.latest||{};$("stat").textContent="";
-  $("metrics").innerHTML="<h2>"+esc(x.brand)+" <small>"+esc(x.domain)+" · "+x.run_count+" run(s)</small></h2>"+
+function engBoxes(av){$("fengs").innerHTML=(av||[]).map(function(e){return "<label><input type=checkbox class=feng value=\""+esc(e)+"\""+(F.engines.indexOf(e)>=0?" checked":"")+"> "+esc(e)+"</label>"}).join("")}
+function body(){return {client:$("client").value,date_from:F.date_from,date_to:F.date_to,engines:F.engines}}
+function load(){$("stat").textContent="loading…";
+ api("context",body()).then(function(x){$("stat").textContent="";if(x.error){$("metrics").innerHTML="<p class=err>"+esc(x.error)+"</p>";return}
+  var L=x.latest||{},filt=F.date_from||F.date_to||F.engines.length;engBoxes(x.engines_available);
+  $("metrics").innerHTML="<h2>"+esc(x.brand)+" <small>"+esc(x.domain)+" · "+x.run_count+" of "+x.total_runs+" run(s)"+(filt?" match filters":"")+"</small></h2>"+
   (x.unconfirmed&&x.unconfirmed.length?"<p><span class=tag>unconfirmed: "+esc(x.unconfirmed.join(", "))+"</span></p>":"")+
-  "<h3>Latest run "+esc(L.run||"—")+"</h3>"+tbl(L.dashboard)+"<h3>Competitive share of voice</h3>"+tbl(L.share_of_voice)+
-  "<h3>Share of Model history</h3>"+tbl((x.runs||[]).map(function(r){return Object.assign({run:r.run},r.som_by_engine)}))+
-  (L.cost?"<p><small>Latest run cost: $"+L.cost.total_usd+"</small></p>":"")}).catch(function(){$("stat").textContent="box not responding - is ./relay.sh running?"});
+  (L.run?"<h3>Latest run "+esc(L.run)+"</h3>"+tbl(L.dashboard)+momHtml(x.mom)+"<h3>Competitive share of voice</h3>"+tbl(L.share_of_voice)+
+  "<h3>Share of Model history</h3>"+tbl((x.runs||[]).map(function(r){return Object.assign({run:r.run,date:r.date},r.som_by_engine)}))+
+  (L.cost?"<p><small>Latest run cost: $"+L.cost.total_usd+"</small></p>":""):"<p>"+(filt?"No real runs match these filters.":"No real runs yet.")+"</p>")})
+ .catch(function(e){$("stat").textContent=e.why||"box not responding"});
  loadAsks()}
-function loadAsks(){api("asks",{client:$("client").value}).then(function(xs){$("alist").innerHTML=xs.reverse().map(function(x){
+function loadAsks(){return api("asks",{client:$("client").value}).then(function(xs){POLL=30000;$("alist").innerHTML=xs.reverse().map(function(x){
   return "<div style='border-top:1px solid #ddd;margin-top:8px'><p><b>"+esc(x.question)+"</b> <span class=tag>"+esc(x.status)+"</span></p>"+
-  x.answers.map(function(a){return "<p><small>"+esc(a.by)+" · "+esc(a.at)+"</small><br>"+esc(a.text).replace(/\n/g,"<br>")+"</p>"}).join("")+"</div>"}).join("")}).catch(function(){})}
-$("api").classList.add("hide");
-$("login").onclick=async function(){$("lerr").textContent="signing in…";try{KEY=await derive($("pw").value);var cs=await api("clients");
- S.k=b64(await crypto.subtle.exportKey("raw",KEY));$("pw").value="";$("lerr").textContent="";show(cs)}catch(e){KEY=null;$("lerr").textContent="Sign-in failed (wrong password, or the SDM box is offline)"}};
+  x.answers.map(function(a){return "<p><small>"+esc(a.by)+" · "+esc(a.at)+"</small><br>"+esc(a.text).replace(/\n/g,"<br>")+"</p>"}).join("")+"</div>"}).join("")})
+  .catch(function(e){POLL=Math.min(POLL*2,300000);$("stat").textContent=(e.why||"could not refresh answers")+" Retrying in "+Math.round(POLL/1000)+"s."})}
+function schedule(){clearTimeout(pollT);pollT=setTimeout(function(){(KEY&&!document.hidden?loadAsks():Promise.resolve()).then(schedule,schedule)},POLL)}
+document.addEventListener("visibilitychange",function(){if(!document.hidden&&KEY){loadAsks();schedule()}});
+$("login").onclick=async function(){var pw=$("pw").value;if(!pw)return;$("login").disabled=true;$("lerr").textContent="signing in…";
+ try{KEY=await derive(pw);var cs=await relay("clients");S.k=b64(await crypto.subtle.exportKey("raw",KEY));$("pw").value="";$("lerr").textContent="";show(cs);schedule()}
+ catch(e){KEY=null;$("lerr").textContent="checking…";var why=await explain(e);$("lerr").textContent=why||"Wrong password."}finally{$("login").disabled=false}};
 $("pw").onkeydown=function(e){if(e.key=="Enter")$("login").onclick()};
-$("logout").onclick=logout;$("client").onchange=load;
-$("asend").onclick=function(){var q=$("aq").value.trim();if(!q)return;$("aq").value="";$("stat").textContent="asking…";
- api("ask",{client:$("client").value,question:q,date_range:$("arange").value,filters:$("afilt").value}).then(function(){$("stat").textContent="";loadAsks()})};
-setInterval(function(){if(KEY)loadAsks()},30000);
-if(S.k)crypto.subtle.importKey("raw",unb64(S.k),"AES-GCM",true,["encrypt","decrypt"]).then(function(k){KEY=k;return api("clients")}).then(show).catch(logout);
+$("logout").onclick=logout;$("client").onchange=function(){F.engines=[];load()};
+$("fapply").onclick=function(){F.date_from=$("ffrom").value;F.date_to=$("fto").value;F.engines=Array.from(document.querySelectorAll(".feng:checked")).map(function(c){return c.value});
+ if(F.date_from&&F.date_to&&F.date_from>F.date_to){$("fnote").textContent="'From' must be before 'To'.";return}$("fnote").textContent="Filters apply to metrics, history, month-over-month and to questions you ask below.";load()};
+$("freset").onclick=function(){F={date_from:"",date_to:"",engines:[]};$("ffrom").value="";$("fto").value="";load()};
+$("asend").onclick=function(){var q=$("aq").value.trim();if(!q)return;$("asend").disabled=true;$("aerr").textContent="";$("stat").textContent="asking…";
+ var b=body();api("ask",{client:b.client,question:q,filters:{date_from:b.date_from,date_to:b.date_to,engines:b.engines}})
+ .then(function(x){if(x&&x.error)throw Object.assign(new Error(x.error),{why:x.error});$("aq").value="";$("stat").textContent="";return loadAsks()})
+ .catch(function(e){$("aq").value=q;$("stat").textContent="";$("aerr").textContent="Not sent: "+(e.why||e.message)+" Your question is still in the box - press Ask to retry."})
+ .finally(function(){$("asend").disabled=false})};
+if(S.k)crypto.subtle.importKey("raw",unb64(S.k),"AES-GCM",true,["encrypt","decrypt"]).then(function(k){KEY=k;return api("clients")}).then(function(cs){show(cs);schedule()}).catch(function(e){logout();$("lerr").textContent=e&&e.why||""});
 </script></body></html>

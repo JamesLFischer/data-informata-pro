@@ -1,6 +1,6 @@
 """Local dashboard + ask API. Binds 127.0.0.1 only. Auth: POST /api/login {password} -> bearer token (12h, HMAC-signed). Password from AIVIS_DASH_PASSWORD (env or secrets dir).
 Static private site is served only to direct localhost requests; through a tunnel only the authenticated API is reachable.
-GET /  -> docs/ ; GET /api/clients ; GET /api/asks[?client=] ; GET /api/context?client= ; POST /api/ask {client,question,date_range,filters}"""
+GET /  -> docs/ ; GET /api/clients ; GET /api/asks[?client=] ; GET /api/context?client=&from=YYYY-MM-DD&to=YYYY-MM-DD&engines=perplexity,gemini ; POST /api/ask {client,question,date_range,filters}"""
 import os, json, hmac, hashlib, time, base64
 from http.server import ThreadingHTTPServer, SimpleHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
@@ -41,7 +41,9 @@ class H(SimpleHTTPRequestHandler):
             return super().do_GET() if self.client_address[0] == "127.0.0.1" and not self.headers.get("Cf-Connecting-Ip") else self._json({"error": "static files are local-only"}, 403)
         if not self._ok(): return self._json({"error": "bad token"}, 401)
         if u.path == "/api/clients": return self._json(asks.clients())
-        if u.path == "/api/context": return self._json(asks.context(q.get("client", [""])[0]))
+        if u.path == "/api/context":
+            g = lambda k: q.get(k, [""])[0] or None
+            return self._json(asks.context(g("client") or "", g("from"), g("to"), g("engines")))
         if u.path == "/api/asks":
             c = q.get("client", [None])[0]; return self._json([x for x in asks.load_all() if not c or x["client"] == c][-30:])
         self._json({"error": "not found"}, 404)
