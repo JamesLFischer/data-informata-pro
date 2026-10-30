@@ -1,2 +1,4 @@
-// Public config only. API_BASE = the authenticated ask/metrics API (aivis.server behind a tunnel). No secrets here.
-window.AIVIS_API_BASE = "https://monday-down-optimum-nav.trycloudflare.com";  // quick tunnel - changes when the tunnel restarts
+// Public config only - no secrets. The channel name is not a secret: without the password nothing on it can be read or forged.
+window.AIVIS_RELAY = {ntfy: "https://ntfy.sh", channel: "sdm-aeo-c3bf3ba70a6eb508376e48e9"};
+// Optional direct API (aivis.server behind an HTTPS tunnel). Leave "" to use the encrypted relay.
+window.AIVIS_API_BASE = "";
