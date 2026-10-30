@@ -37,7 +37,7 @@ def main(argv=None):
     if a.limit: prompts = prompts[:a.limit]
     if a.estimate:
         sel = a.engines.split(",") if a.engines else ["gemini", "perplexity", "claude", "openai"]
-        per = {"gemini": .04, "perplexity": .01, "claude": .03, "openai": .03}  # observed/rough $ per grounded prompt
+        per = {"gemini": .04, "perplexity": .003, "claude": .03, "openai": .03}  # observed/rough $ per grounded prompt
         tot = sum(per.get(k.strip(), .03) for k in sel) * len(prompts)
         print(f"{slug}: {len(prompts)} prompts x {len(sel)} engines = {len(prompts)*len(sel)} calls; ~${tot:.2f} answers + ~${.002*len(prompts)*len(sel):.2f} judge (rough)")
         return
