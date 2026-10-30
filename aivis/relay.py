@@ -34,6 +34,10 @@ def dec(s):
 def handle(req):
     p, b = req.get("path", ""), req.get("body") or {}
     if p == "ping": return {"ok": True, "ts": int(time.time())}
+    if p == "projects":
+        from . import project; return project.projects()
+    if p == "project":
+        from . import project; return project.build(b.get("client"), b.get("engines"))
     if p == "clients": return asks.clients()
     if p == "context": return asks.context(b.get("client", ""), b.get("date_from") or None, b.get("date_to") or None, b.get("engines") or None)
     if p == "asks": return [x for x in asks.load_all() if x["client"] == b.get("client")][-30:]

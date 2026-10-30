@@ -86,3 +86,7 @@ Without OpenAI/Anthropic credit, scoring falls back to rule-based (no LLM judge)
 
 ## Status: infrastructure COMPLETE except James-only items (Oct 30, 4:05 PM PT)
 See COMPLETION_CHECKLIST.md. New: Perplexity baseline runs for all 3 clients ($0.14), relay heartbeat + stale-restart watchdog, month-over-month deltas + date/engine filters (aivis/history.py), `./asks.sh pending` (exit 3 when questions wait) for routines.
+
+## Oct 30, 2026 4:15 PM PT: Projects rebuild + parity
+- Site is reorganized as Projects, with Overview, Visual, Written and Ask tabs. Relay paths `projects` and `project` were added; the relay was restarted (connected, 0 errors).
+- jonesfirm/canycom are locked at 42 prompts (v2). Perplexity runs completed at 4:09–4:10 PM PT: Jones Firm SoM 45.2%, Canycom 40.7%. Incremental cost was about $0.06.

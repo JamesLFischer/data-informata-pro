@@ -36,3 +36,12 @@ Repo (public): https://github.com/JamesLFischer/sdm-aeo-reporting · Site: https
 - ntfy.sh public server: rate limits, ~12h message retention — fine for a few staff.
 - Month-over-month deltas appear once a client has a second run of the same engine; existing reports aren't re-rendered (new runs get the section; site/dashboard show MoM for all runs now).
 - Windows 101 history mixes engines (old Gemini no-grounding runs, new Perplexity run); compare per engine.
+
+## Projects + parity (Oct 30, 2026)
+- [x] Project cards home, per-project Overview / Visual / Written / Ask
+- [x] Written narrative from real data; positive framing; no tool names
+- [x] Locked 42-prompt battery (unbranded + branded sentiment) for Jones Firm & Canycom
+- [x] SoM, citations/mentions by engine, top cited domains, own-site citations, cost
+- [x] Engine-pair plan documented; Perplexity-only runs flagged
+- [ ] James: confirm competitor lists (Jones Firm, Canycom)
+- [ ] James: fund OpenAI + Gemini (and Anthropic for the LLM judge) to reach ChatGPT + Google parity

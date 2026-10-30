@@ -147,3 +147,17 @@ Total is about $3-5 per 25-prompt run, or roughly $6-10 for 50 prompts. Profound
 
 
 See **COMPLETION_CHECKLIST.md** for what's done and what only James can do.
+
+## Projects site (Oct 30, 2026)
+After sign-in, the home page lists one **project card per client** (`configs/*.yaml`), showing headline Share of Model. Routes are `#/p/<slug>/<tab>`, and each project has four tabs:
+- **Overview**: KPIs (SoM by engine, unbranded inclusion, branded sentiment, own-site citations), filters, the full metrics, MoM and history.
+- **Visual report**: SoM by engine; unbranded vs branded; inclusion by topic cluster; competitive SOV; SoM trend (SVG); most-cited sources; opportunities/wins; measurement cost.
+- **Written report**: a client-ready monthly narrative generated from real run data (`aivis/project.py: narrative`). It is printable to PDF.
+- **Ask Profound Bot**: the encrypted ask/answer loop, scoped to the project.
+Backend: relay paths `projects` and `project` → `aivis/project.py`. A new client only needs `./new_client.sh <slug>` plus a run.
+
+## Profound-parity tracking (Jones Firm, Canycom)
+- Locked battery v2 (`prompt_set_version: 2`, `locked: 2026-10-30`): 42 prompts = 35 unbranded visibility + 7 branded sentiment (`kind:` on clusters; the rest are classified by brand-alias match). P01–P25 are unchanged for continuity.
+- Comparable engine pair: `parity_engines: [openai, gemini]` (ChatGPT + Google). **Runs are Perplexity-only until OpenAI/Gemini are funded.**
+- Estimates per client per month: Perplexity only ≈ $0.13 + $0.08 judge; ChatGPT + Gemini ≈ $2.94 + $0.17; all 4 ≈ $4.33 + $0.34.
+- Competitor lists are **unconfirmed** and flagged in the UI until the client confirms them.

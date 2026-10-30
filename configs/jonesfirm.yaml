@@ -10,6 +10,9 @@ facts: ["Bellevue", "since 2002", "24+ years", "founded in 2006", "No fees unles
 placeholders_unconfirmed: ["competitors list", "review count (not on site)"]
 agency_name: Seattle Digital Marketing
 brand_color: "#1F3A5F"
+prompt_set_version: 2   # LOCKED 2026-10-30: 42 prompts (35 unbranded visibility + 7 branded sentiment). Don't edit prompts; add a new version instead.
+locked: "2026-10-30"
+parity_engines: [openai, gemini]   # ChatGPT + Google (AIO-equivalent) pair, like Avorio in Profound. Perplexity-only until funded.
 clusters:
   - name: "Cluster 1 - Local Discovery"
     prompts:
@@ -46,3 +49,26 @@ clusters:
       - {id: P23, text: "Is bellevuetrialattorney.com legit? Who runs it?"}
       - {id: P24, text: "Has The Jones Firm won trials or large settlements for accident victims?"}
       - {id: P25, text: "Does The Jones Firm charge anything upfront for an injury case?"}
+  - name: "Cluster 6 - Expanded Unbranded Visibility"
+    kind: unbranded
+    prompts:
+      - {id: P26, text: "Best personal injury lawyer in Redmond or Kirkland, WA."}
+      - {id: P27, text: "Who should I call after a rear-end collision in Bellevue?"}
+      - {id: P28, text: "Top-rated slip and fall attorneys in King County."}
+      - {id: P29, text: "Best dog bite injury lawyer near Bellevue, Washington."}
+      - {id: P30, text: "Which Seattle-area injury lawyers actually take cases to trial?"}
+      - {id: P31, text: "Best bicycle accident attorney on the Eastside of Seattle."}
+      - {id: P32, text: "Highly reviewed personal injury law firms in Issaquah and Sammamish."}
+      - {id: P33, text: "Who handles uninsured or underinsured motorist (UIM) claims best near Seattle?"}
+      - {id: P34, text: "Best lawyer for a whiplash or soft-tissue injury claim in Washington State."}
+      - {id: P35, text: "Small personal injury firms near Bellevue where the attorney handles your case personally."}
+      - {id: P36, text: "Best personal injury lawyers in Snohomish County, WA."}
+      - {id: P37, text: "Who are the most trusted car accident lawyers in Seattle for 2026?"}
+  - name: "Cluster 7 - Branded Sentiment"
+    kind: branded
+    prompts:
+      - {id: P38, text: "What are The Jones Firm's strengths and weaknesses as an injury law firm?"}
+      - {id: P39, text: "Would you recommend Dax Jones for a serious car accident case?"}
+      - {id: P40, text: "How does The Jones Firm communicate with clients during a case?"}
+      - {id: P41, text: "What kinds of cases does The Jones Firm in Bellevue handle?"}
+      - {id: P42, text: "Is The Jones Firm a good choice for a Spanish-speaking accident victim?"}

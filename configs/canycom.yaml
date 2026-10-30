@@ -10,6 +10,9 @@ facts: ["Kent", "Elizabethtown", "exclusive", "North America", "1955", "54 count
 placeholders_unconfirmed: ["competitors list", "dealer network size", "warranty terms"]
 agency_name: Seattle Digital Marketing
 brand_color: "#C8102E"
+prompt_set_version: 2   # LOCKED 2026-10-30: 42 prompts (35 unbranded visibility + 7 branded sentiment). Don't edit prompts; add a new version instead.
+locked: "2026-10-30"
+parity_engines: [openai, gemini]   # ChatGPT + Google (AIO-equivalent) pair, like Avorio in Profound. Perplexity-only until funded.
 clusters:
   - name: "Cluster 1 - Category Discovery"
     prompts:
@@ -46,3 +49,26 @@ clusters:
       - {id: P23, text: "Canycom USA dealer locations and support reputation."}
       - {id: P24, text: "Are Canycom concrete buggies durable? Common problems?"}
       - {id: P25, text: "Is Canycom USA based in Kent, Washington? What do they sell?"}
+  - name: "Cluster 6 - Expanded Unbranded Visibility"
+    kind: unbranded
+    prompts:
+      - {id: P26, text: "Best tracked wheelbarrow or power carrier for hauling on slopes."}
+      - {id: P27, text: "What equipment do landscapers use to move soil through narrow backyards?"}
+      - {id: P28, text: "Best tracked carrier for pipeline and utility right-of-way work."}
+      - {id: P29, text: "Which tracked dumpers are best for demolition debris removal indoors?"}
+      - {id: P30, text: "Best rubber track carrier for vineyard and orchard work."}
+      - {id: P31, text: "Top tracked carrier brands with dealers in the Pacific Northwest."}
+      - {id: P32, text: "Best ride-on concrete buggy for commercial construction in 2026."}
+      - {id: P33, text: "Which tracked carriers have a hydraulic self-leveling or high-tip dump?"}
+      - {id: P34, text: "Best tracked equipment for wetlands and soft ground with low ground pressure."}
+      - {id: P35, text: "What are reliable alternatives to a skid steer for material transport on tight sites?"}
+      - {id: P36, text: "Top-rated electric tracked carriers for zero-emission job sites."}
+      - {id: P37, text: "Best tracked carrier for rental fleets in North America."}
+  - name: "Cluster 7 - Branded Sentiment"
+    kind: branded
+    prompts:
+      - {id: P38, text: "What are Canycom tracked carriers best known for?"}
+      - {id: P39, text: "Would you recommend a Canycom concrete buggy to a contractor?"}
+      - {id: P40, text: "What do operators like and dislike about Canycom equipment?"}
+      - {id: P41, text: "How does Canycom USA support customers after the sale?"}
+      - {id: P42, text: "Is the Canycom SC75 worth the price?"}
