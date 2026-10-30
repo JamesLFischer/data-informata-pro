@@ -42,8 +42,8 @@ async function waitTopic(topic,ms,done){var end=Date.now()+ms,ac=new AbortContro
  while(Date.now()<end){await sleep(1500);var r2;try{r2=await fetch(R.ntfy+"/"+topic+"/json?poll=1&since=all")}catch(e){continue}if(r2.status==429)throw E("rate");
   var ls2=(await r2.text()).split("\n");for(var j=0;j<ls2.length;j++){if(!ls2[j])continue;var m2=JSON.parse(ls2[j]);if(m2.event=="message"){var v2=done(m2.message);if(v2!==undefined)return v2}}}
  return undefined}
-async function relay(path,body){var id=rid(),parts={},n=0;
- var w=waitTopic(R.channel+"-r-"+id,35000,function(msg){var c=JSON.parse(msg);parts[c.i]=c.d;n=c.n;if(n&&Object.keys(parts).length==n){var s="";for(var i=0;i<n;i++)s+=parts[i];return s}});
+async function relay(path,body,ms){var id=rid(),parts={},n=0;
+ var w=waitTopic(R.channel+"-r-"+id,ms||35000,function(msg){var c=JSON.parse(msg);parts[c.i]=c.d;n=c.n;if(n&&Object.keys(parts).length==n){var s="";for(var i=0;i<n;i++)s+=parts[i];return s}});
  await post(R.channel+"-req",await enc({id:id,ts:Date.now(),path:path,body:body||{}}));
  var s=await w;if(s===undefined)throw E("timeout");var out=await dec(s);setConn("ok");return out}
 // Liveness check that needs no password: is the box's relay worker answering at all?
@@ -82,7 +82,7 @@ function loadAsks(){return api("asks",{client:$("client").value}).then(function(
 function schedule(){clearTimeout(pollT);pollT=setTimeout(function(){(KEY&&!document.hidden?loadAsks():Promise.resolve()).then(schedule,schedule)},POLL)}
 document.addEventListener("visibilitychange",function(){if(!document.hidden&&KEY){loadAsks();schedule()}});
 $("login").onclick=async function(){var pw=$("pw").value;if(!pw)return;$("login").disabled=true;$("lerr").textContent="signing in…";
- try{KEY=await derive(pw);var cs=await relay("clients");S.k=b64(await crypto.subtle.exportKey("raw",KEY));$("pw").value="";$("lerr").textContent="";show(cs);schedule()}
+ try{KEY=await derive(pw);var cs=await relay("clients",null,20000);S.k=b64(await crypto.subtle.exportKey("raw",KEY));$("pw").value="";$("lerr").textContent="";show(cs);schedule()}
  catch(e){KEY=null;$("lerr").textContent="checking…";var why=await explain(e);$("lerr").textContent=why||"Wrong password."}finally{$("login").disabled=false}};
 $("pw").onkeydown=function(e){if(e.key=="Enter")$("login").onclick()};
 $("logout").onclick=logout;$("client").onchange=function(){F.engines=[];load()};

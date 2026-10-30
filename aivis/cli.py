@@ -15,6 +15,7 @@ def main(argv=None):
     ap.add_argument("--rescore", action="store_true", help="with --resume, re-judge reused rows that fell back to rules")
     ap.add_argument("--list", action="store_true", help="list client configs and exit")
     ap.add_argument("--estimate", action="store_true", help="print expected API calls and rough cost, then exit (no spend)")
+    ap.add_argument("--validate", action="store_true", help="check the client config and exit (non-zero on errors)")
     ap.add_argument("--pace", type=float, help="seconds to wait before each API call (free-tier pacing)")
     a = ap.parse_args(argv)
     if a.no_grounding: os.environ["GEMINI_GROUNDING"] = "0"; E.GeminiEngine.grounding = False
@@ -29,8 +30,13 @@ def main(argv=None):
         return
     path = a.config if os.path.exists(a.config) else os.path.join(cdir, a.config + ".yaml")
     if not os.path.exists(path): sys.exit(f"No config '{a.config}'. Run with --list.")
-    cfg = yaml.safe_load(open(path))
+    from . import validate
     slug = os.path.splitext(os.path.basename(path))[0]
+    if a.validate: return validate.main([path])
+    errs, _ = validate.check_file(path)
+    if errs and not a.mock and not a.estimate:
+        sys.exit("Config errors (fix before a live run; see python3 -m aivis.validate " + slug + "):\n  - " + "\n  - ".join(errs))
+    cfg = yaml.safe_load(open(path))
     if cfg.get("placeholders_unconfirmed"): print("NOTE: this config has facts marked PLACEHOLDER - confirm with James before client delivery", file=sys.stderr)
     prompts = [(p.get("id") or f"P{i+1:02d}", c["name"], p["text"] if isinstance(p, dict) else p)
                for c in cfg["clusters"] for i, p in enumerate(c["prompts"])]

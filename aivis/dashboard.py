@@ -36,6 +36,10 @@ def main():
             m = {d[0]: d[5] for d in read_dash(r)[1:] if len(d) > 5}
             if trend: trend.append([os.path.basename(r)] + [m.get(k, "—") for k in trend[0][1:]])
         trend_html = f"<div class=card><h3>Share of Model trend (per engine)</h3>{table(trend)}</div>" if len(trend) > 2 else ""
+        from .history import mom
+        from .report import mom_html
+        m = mom(slug) if not a.include_examples else None
+        if m: trend_html = f"<div class=card>{mom_html(m).replace('<h2>', '<h3>').replace('</h2>', '</h3>')}</div>" + trend_html
         items = []
         for r in reversed(runs):
             name = os.path.basename(r); dst = os.path.join(cdir, name); os.makedirs(dst)
