@@ -1,4 +1,22 @@
-# SDM AEO Reporting Tool — Infra Status (Oct 30, 2026, 3:35 PM PT)
+# SDM AEO Reporting Tool — Infra Status (current as of Oct 30, 2026, 4:20 PM PT)
+
+**Bottom line:** infrastructure is complete except James-only items (see COMPLETION_CHECKLIST.md): API billing for OpenAI / Anthropic / Gemini, competitor + fact confirmation for Canycom and Jones Firm, and a durable chat transport (Cloudflare account + domain / paid or self-hosted ntfy / small host) to replace the best-effort public ntfy.sh relay.
+
+| Area | State |
+|---|---|
+| Runner + scoring + reports | ✅ multi-client, 4 engines (only Perplexity funded), rule scoring until a judge key has credit |
+| Month-over-month | ✅ `mom.json` + report section on new runs; site, private dashboard, auto-answers |
+| Filters | ✅ date range + engine applied in site, relay and `/api/context` |
+| Multi-client | ✅ `new_client.sh` → `python3 -m aivis.validate` → `--estimate` → `--limit 2`; live runs refuse invalid configs |
+| Hosted site + chat | ✅ https://jameslfischer.github.io/sdm-aeo-reporting/ via encrypted ntfy relay; clear error states; liveness ping |
+| Relay ops | ✅ `relay_keepalive.sh` running (60s watchdog, stale-heartbeat restart). ⚠ Not restarted automatically after a box reboot — needs a routine |
+| Questions for Profound Bot | ✅ `./asks.sh pending` (exit 3 when waiting) → `answer` |
+
+Older log entries follow (some blockers below are resolved: the GitHub repo exists and is public by James's choice; the relay replaced the tunnel).
+
+---
+
+## Log: Oct 30, 2026, 3:35 PM PT
 
 Profound remains Avorio-only. This repo is the in-house, multi-client Share-of-Model tracker.
 

@@ -115,7 +115,10 @@ Total is about $3-5 per 25-prompt run, or roughly $6-10 for 50 prompts. Profound
 - The real API adapters had not been tested against live keys when this was written. Do a `--limit 2` run once keys are added.
 
 ## Platform quick reference (Oct 30, 2026 update)
-- **Add a client:** `./new_client.sh <slug> "Brand" domain.com` → edit competitors/facts/prompts → `./run.sh <slug> --estimate` (no spend) → `./run.sh <slug> --limit 2` (smoke run, tagged `_SMOKE`, not published) → full run.
+- **Add a client:** `./new_client.sh <slug> "Brand" domain.com [--competitors "A, B"]` (writes 5 clusters × 5 TODO prompts) → fill prompts, competitors, verified facts → `python3 -m aivis.validate <slug>` (must show no ERROR lines; live runs refuse configs with errors) → `./run.sh <slug> --estimate` (no spend) → `./run.sh <slug> --limit 2` (smoke run, tagged `_SMOKE`, not published) → full run. The client appears on the site automatically.
+- **Validate all configs:** `python3 -m aivis.validate` (exit 1 on errors). Checks required fields, template placeholders, bare domain, hex colour, prompt ids present and unique (ids keep month-over-month history aligned), prompt count, competitors/facts present, unconfirmed items.
+- **Month-over-month:** every real run writes `mom.json` and a "Change vs Last Month" section in the HTML/PDF report. Baseline = latest real run in an earlier calendar month, else the previous run (labelled). Engines are matched by family (e.g. "Perplexity Sonar" = "Perplexity"; grounded and ungrounded Gemini are kept apart). Prompt-count changes and new/missing engines are flagged in Notes. CLI: `python3 -m aivis.history <slug> [--from YYYY-MM-DD --to YYYY-MM-DD --engines perplexity,gemini]`.
+- **Filters (site + API):** date range (by run timestamp) and engine filters apply to latest metrics, share of voice (recomputed from the evaluation log for the selected engines), history, month-over-month and to auto-answers for questions asked while filtered. Direct API: `GET /api/context?client=&from=&to=&engines=`.
 - **Monthly batch:** `./run_all.sh` then `./build_dashboard.sh` (writes gitignored `private_site/`; nothing to commit).
 - **Keys:** `.env` or one file per key in `/home/box/.secrets/` (`AIVIS_SECRETS_DIR`). `run.sh` loads them; nothing is printed or committed.
 - **Per-run outputs:** evaluation log CSV, executive dashboard CSV, **competitive share-of-voice CSV**, tracker.xlsx, HTML/PDF report, `cost.json` (Perplexity cost is billed-exact; others estimated).
@@ -136,6 +139,8 @@ Total is about $3-5 per 25-prompt run, or roughly $6-10 for 50 prompts. Profound
 - Rotate the password: replace `/home/box/.secrets/AIVIS_DASH_PASSWORD`, restart `./relay.sh`. Everyone signs in again.
 - `./serve.sh` (`aivis/server.py`) remains as a direct HTTPS API alternative (bearer token, CORS limited) if a tunnel or host becomes available — set `AIVIS_API_BASE` (direct mode isn't wired into the new app yet).
 - **Keep `./relay.sh` running on the box.** If it stops, sign-in shows "the SDM box is offline".
+- **Robustness:** the relay reconnects with exponential backoff (2s→60s), resumes from the last message it saw (requests sent during a reconnect aren't lost; served ids persist in `/tmp/aivis_relay_seen.json`, so a restart never double-saves an ask), honours ntfy `429 Retry-After`, retries publishes, and writes a heartbeat to `/tmp/aivis_relay_status.json`. `relay_watchdog.sh` restarts it if the process is gone or the heartbeat is >5 min old.
+- **Site error states:** the browser waits for replies with one streaming request (polling fallback) to stay under ntfy rate limits, retries once, then runs a password-free liveness ping (`<channel>-ping` → `<channel>-pong-<id>`) to tell the user exactly what's wrong: "Wrong password", "SDM box is offline", "rate-limited — wait a minute", or "timed out — retry". A failed question stays in the box with a retry hint. Answer polling (30s) pauses while the tab is hidden and backs off up to 5 min on errors.
 
 ### Profound Bot side
 `./asks.sh list | context <slug> | answer <id> "text"` — answers show up in the site chat within 20s.

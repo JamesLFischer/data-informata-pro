@@ -1,4 +1,4 @@
-# SDM AEO Reporting — Completion Checklist (Oct 30, 2026, 4:05 PM PT)
+# SDM AEO Reporting — Completion Checklist (updated Oct 30, 2026, 4:20 PM PT)
 
 Repo (public): https://github.com/JamesLFischer/sdm-aeo-reporting · Site: https://jameslfischer.github.io/sdm-aeo-reporting/
 
@@ -13,14 +13,19 @@ Repo (public): https://github.com/JamesLFischer/sdm-aeo-reporting · Site: https
 - [x] In-site sign-in + metrics + Ask Profound Bot via end-to-end-encrypted ntfy.sh relay (box needs no inbound port; tunnels are blocked on the box)
 - [x] Relay keepalive (`relay_keepalive.sh` → `relay_watchdog.sh`, 60s) — kill-tested, auto-restarted; also restarts a hung relay via stale heartbeat (5 min)
 - [x] Ask loop: site → `inbox/` → instant artifact-grounded answer; judgment questions → `needs_bot` → `./asks.sh pending|list|answer` → reply shows in site. Verified end to end.
-- [x] Docs: README (setup, run, deploy, auth), INFRA_STATUS.md, this checklist
+- [x] Month-over-month deltas: `mom.json` + "Change vs Last Month" section in every new client report (HTML/PDF), on the private dashboard, on the site, and in auto-answers (`aivis/history.py`)
+- [x] Date-range + engine filters actually applied in the site and API (`/api/context?from=&to=&engines=`, relay `context`), incl. share of voice recomputed per selected engine; asks carry structured filters
+- [x] Multi-client readiness: `aivis/validate.py` (live runs refuse configs with errors; `--estimate` still allowed), `new_client.sh` rewritten in Python (safe for any brand characters, 25 TODO prompt slots with ids)
+- [x] Hosted chat robustness: relay backoff/resume/429 handling/publish retries/seen-id persistence; site streaming replies, liveness ping, clear error states (wrong password vs box offline vs rate-limited vs timeout), ask retry, hidden-tab pause. Tested in Chrome: wrong password → "Wrong password."; offline channel → "SDM box is offline"; filters + ask verified
+- [x] Docs: README (setup, run, deploy, auth, filters, MoM, validation, relay ops), INFRA_STATUS.md, this checklist
 
 ## Only James can do ⛔
 1. **Billing** — OpenAI (insufficient_quota), Anthropic (credit too low), Gemini (no key/billing). Until then runs are Perplexity-only with rule scoring. Full 4-engine run ≈ $3/client/month.
 2. **Competitor + fact confirmation** — canycom and jonesfirm competitor lists and facts are PLACEHOLDER (shown as "unconfirmed" on the site).
 3. **Vault the site password** — `/home/box/.secrets/AIVIS_DASH_PASSWORD` (parent bot vaults it); share with SDM staff only.
-4. **Decide** whether client configs (prompt sets/competitors) may stay in the public repo.
-5. **Optional:** ask GitHub Support to purge the dangling commit `fa38fd9` (briefly contained internal Avorio notes).
+4. **Durable hosting for the chat path** — today the site reaches the box via the public ntfy.sh relay (works, but best-effort: shared rate limits, depends on the box staying up). Durable options need James: (a) a Cloudflare account + SDM domain for a named tunnel *on a machine whose network allows it* (the box blocks tunnel ports), (b) a paid ntfy.sh plan / self-hosted ntfy on an SDM server, or (c) a small always-on host (Fly/Render) for the API. Also: a routine to restart `relay_keepalive.sh` after box reboots.
+5. **Decide** whether client configs (prompt sets/competitors) may stay in the public repo.
+6. **Optional:** ask GitHub Support to purge the dangling commit `fa38fd9` (briefly contained internal Avorio notes).
 
 ## Recommended (Grok Bot routines, not code)
 - Every 10–15 min: `./asks.sh pending` → answer `needs_bot` questions as Profound Bot.
@@ -29,5 +34,5 @@ Repo (public): https://github.com/JamesLFischer/sdm-aeo-reporting · Site: https
 
 ## Known limits
 - ntfy.sh public server: rate limits, ~12h message retention — fine for a few staff.
-- Month-over-month deltas appear once a client has a second run of the same engine.
+- Month-over-month deltas appear once a client has a second run of the same engine; existing reports aren't re-rendered (new runs get the section; site/dashboard show MoM for all runs now).
 - Windows 101 history mixes engines (old Gemini no-grounding runs, new Perplexity run); compare per engine.
