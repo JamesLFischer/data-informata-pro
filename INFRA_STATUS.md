@@ -54,3 +54,9 @@ Without OpenAI/Anthropic credit, scoring falls back to rule-based (no LLM judge)
   2. Ask Grok Bot support to allow outbound tunnel traffic (TCP 7844) from the box — keeps everything on the box (best fit).
   3. Deploy the API to a small host (Fly/Render) with the outputs and a shared inbox store (more work; v2).
 - Once a stable tunnel URL exists: set `window.AIVIS_API_BASE` in `docs/config.js` and push.
+
+## FIXED: public site ↔ box via encrypted relay (Oct 30, 3:50 PM PT)
+- Tunnel tests from the box: cloudflared quic + http2 (blocked, TCP 7844), localhost.run/serveo/pinggy ssh (closed), localtunnel (URL issued, data port blocked → 503), tunnelmole (port 8083 blocked), ngrok (needs James's account token; untested). Plain outbound HTTPS works.
+- Shipped: encrypted ntfy.sh relay (`aivis/relay.py`, `./relay.sh`), wired into `docs/index.html`. Verified on the live Pages site in a real browser: wrong password rejected, correct password signs in, Windows 101 metrics load, ask posted and auto-answered (test ask deleted afterwards).
+- Profound Bot loop unchanged: `./asks.sh list` → `./asks.sh answer <id> "..."` → reply shows in the site chat within ~30s.
+- Limits: relay worker must stay running (stops if the box restarts — restart `./relay.sh`, or add a routine/watchdog). ntfy.sh public server has rate limits (fine for a few staff, not heavy use). Questions aren't pushed into Profound Bot's chat; it checks `./asks.sh list` (routine recommended). Answers to judgment questions wait for the bot.

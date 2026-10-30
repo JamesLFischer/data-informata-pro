@@ -129,17 +129,13 @@ Total is about $3-5 per 25-prompt run, or roughly $6-10 for 50 prompts. Profound
 - **Public site:** https://jameslfischer.github.io/sdm-aeo-reporting/ (GitHub Pages from `main` /docs). Visitors see only the marketing/sign-in shell.
 - **Never in git:** `.env`, keys, `output/` (run data), `inbox/` (questions), `private_site/` (built client dashboards), `AVORIO_PROFOUND_HISTORY.md`. History was rebuilt before the first push, so none of these were ever published.
 
-### How auth works
-- All client metrics and the Profound Bot chat come from `aivis.server` (`./serve.sh`) on the box, never from Pages.
-- `POST /api/login {password}` → 12-hour HMAC-signed bearer token. Every other `/api/*` call needs it; wrong passwords get 401 after a 2s delay.
-- Password: `/home/box/.secrets/AIVIS_DASH_PASSWORD` (signing key `AIVIS_SESSION_KEY`). Share it with SDM staff only; rotate by replacing the file and restarting `./serve.sh`.
-- CORS only allows `https://jameslfischer.github.io` and localhost (`AIVIS_ALLOWED_ORIGINS` to change).
-- Through a tunnel only the API is reachable; the static private site is served to direct localhost requests only.
-
-### Exposing the API to the public site
-1. `./serve.sh` (port 8000, binds 127.0.0.1).
-2. Tunnel it: `cloudflared tunnel --url http://127.0.0.1:8000` (quick tunnel: URL changes on every restart) or a named Cloudflare tunnel on your own domain (stable; recommended).
-3. Put the tunnel URL in `docs/config.js` (`AIVIS_API_BASE`) and push, or paste it into the API URL field on the sign-in form.
+### How sign-in and chat work (live)
+- The public site talks to the box through an **end-to-end encrypted relay on ntfy.sh** (plain HTTPS, so the box needs no inbound port or tunnel — the box's network blocks Cloudflare/ssh/localtunnel tunnels).
+- Sign-in: the browser derives an AES-256-GCM key from the team password (PBKDF2-SHA256, 200k rounds, salt = channel name) and sends an encrypted request. The box worker (`./relay.sh`, `aivis/relay.py`) holds the same password in `/home/box/.secrets/`, decrypts it, answers, and encrypts the reply. Wrong password → the box can't decrypt → no reply → "Sign-in failed".
+- ntfy.sh only sees ciphertext. The channel name in `docs/config.js` is public by design; it doesn't let anyone read or forge messages. Old (>120s) and replayed requests are dropped. Messages expire from ntfy within ~12h.
+- Rotate the password: replace `/home/box/.secrets/AIVIS_DASH_PASSWORD`, restart `./relay.sh`. Everyone signs in again.
+- `./serve.sh` (`aivis/server.py`) remains as a direct HTTPS API alternative (bearer token, CORS limited) if a tunnel or host becomes available — set `AIVIS_API_BASE` (direct mode isn't wired into the new app yet).
+- **Keep `./relay.sh` running on the box.** If it stops, sign-in shows "the SDM box is offline".
 
 ### Profound Bot side
 `./asks.sh list | context <slug> | answer <id> "text"` — answers show up in the site chat within 20s.
