@@ -93,3 +93,4 @@ See COMPLETION_CHECKLIST.md. New: Perplexity baseline runs for all 3 clients ($0
 - Oct 31, 2026 7:10 PM PT: UI/graphics refresh (docs/index.html). project.summary now carries a sparkline trend; relay restarted and connected.
 - Oct 31, 2026 7:25 PM PT: report v3 (UI_GFX_DESIGN_BRIEF.md). project.py detail layer added; relay restarted and connected.
 - Oct 31, 2026 7:40 PM PT: public landing page + sign-in card (docs/index.html). Auth, relay and app behavior unchanged; client-name grep of the public HTML = 0.
+- Oct 31, 2026 7:45 PM PT: rebranded user-facing product to Data Informata Pro (SDM shown only as a 'Built by' credit). Relay and auth unchanged.

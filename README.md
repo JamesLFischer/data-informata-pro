@@ -1,4 +1,4 @@
-# SDM AEO Tracker: Hosting and Git (added Oct 30, 2026)
+# Data Informata Pro: AI Search Visibility & AEO Reporting (built by Seattle Digital Marketing)
 
 ## Layout
 - `aivis/` engine, scoring, report and dashboard code
@@ -184,7 +184,7 @@ See `UI_GFX_DESIGN_BRIEF.md`.
 - **Backend:** `aivis/project.py` adds the prompt matrix, source mix, competitors named instead, opportunities, wins and trend annotations.
 
 ## Public landing + sign-in (Oct 31, 2026)
-The pre-auth page is now an SDM landing page with these sections:
+The pre-auth page is now an Data Informata Pro landing page with these sections:
 - Hero, with the team sign-in card
 - Illustrative sample dashboard (sample data only)
 - Who we are
@@ -194,3 +194,6 @@ The pre-auth page is now an SDM landing page with these sections:
 - CTA band
 
 The sticky navy nav's "Client team sign in" button scrolls to the sign-in card and focuses the password field. After sign-in, the marketing nav and sections hide and the Projects app loads unchanged; Sign out returns to the landing page. No client names or metrics appear in the public HTML.
+
+## Product name: Data Informata Pro (Oct 31, 2026)
+The user-facing product is **Data Informata Pro**. This covers the title, nav, hero, sign-in card, footer, offline message and the Written report title block ("Prepared by Data Informata Pro"). Seattle Digital Marketing appears only as the footer credit "Built by Seattle Digital Marketing". The repo name and internal CLI (`aivis`) are unchanged.

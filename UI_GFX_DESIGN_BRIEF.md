@@ -1,5 +1,6 @@
-# SDM AEO Reporting: UI / Graphics Design Brief
+# Data Informata Pro: UI / Graphics Design Brief
 Oct 31, 2026. Owner: James Fischer. Scope: public Projects dashboard (auth-gated) plus the client-facing Visual and Written reports.
+**Product name:** Data Informata Pro. Seattle Digital Marketing appears only as a "Built by" credit. Earlier "SDM look" references below mean the Data Informata Pro visual language.
 
 ## 1. Lessons from the earlier ChatGPT / Profound visual reports
 From James's ChatGPT history (`/workspace/chatgpt/profound_chats.txt`) and the Avorio notes (`AVORIO_PROFOUND_HISTORY.md`, kept local and out of git):
