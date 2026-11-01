@@ -161,3 +161,18 @@ Backend: relay paths `projects` and `project` → `aivis/project.py`. A new clie
 - Comparable engine pair: `parity_engines: [openai, gemini]` (ChatGPT + Google). **Runs are Perplexity-only until OpenAI/Gemini are funded.**
 - Estimates per client per month: Perplexity only ≈ $0.13 + $0.08 judge; ChatGPT + Gemini ≈ $2.94 + $0.17; all 4 ≈ $4.33 + $0.34.
 - Competitor lists are **unconfirmed** and flagged in the UI until the client confirms them.
+
+## UI refresh (Oct 31, 2026)
+New design system for the dashboard:
+- Home cards show a Share of Model ring and a trend sparkline.
+- Projects have a brand monogram header and segmented tabs.
+- KPI tiles are color-coded.
+- Visual report uses a 2-column chart grid:
+  - engine rings, with ChatGPT/Google shown as "not enabled";
+  - discovery vs. recognition rings;
+  - an axis-labelled SVG trend;
+  - topic bars toned strong/building/opportunity;
+  - a ranked SOV chart and a sources chart, each with the client highlighted.
+- Written report has a document-style layout with print CSS.
+- Loading states use skeletons.
+- Everything is pure inline SVG/CSS, with no external libraries.

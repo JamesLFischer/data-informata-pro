@@ -90,3 +90,4 @@ See COMPLETION_CHECKLIST.md. New: Perplexity baseline runs for all 3 clients ($0
 ## Oct 30, 2026 4:15 PM PT: Projects rebuild + parity
 - Site is reorganized as Projects, with Overview, Visual, Written and Ask tabs. Relay paths `projects` and `project` were added; the relay was restarted (connected, 0 errors).
 - jonesfirm/canycom are locked at 42 prompts (v2). Perplexity runs completed at 4:09–4:10 PM PT: Jones Firm SoM 45.2%, Canycom 40.7%. Incremental cost was about $0.06.
+- Oct 31, 2026 7:10 PM PT: UI/graphics refresh (docs/index.html). project.summary now carries a sparkline trend; relay restarted and connected.

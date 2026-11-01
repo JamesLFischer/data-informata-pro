@@ -25,6 +25,8 @@ def summary(slug):
     if rs:
         m = H.metrics(rs[-1]); p["latest"] = os.path.basename(rs[-1]); p["date"] = H.run_time(rs[-1]).strftime("%b %d, %Y")
         p["som"] = {k: round(v["som"], 1) for k, v in m.items()}
+        p["trend"] = [round(next(iter(H.metrics(r).values()))["som"], 1) for r in rs[-8:] if H.metrics(r)]
+        k = _kinds(cfg); p["unconfirmed"] = cfg.get("placeholders_unconfirmed", [])
     return p
 
 def build(slug, engines=None):
