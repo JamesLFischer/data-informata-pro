@@ -1,6 +1,6 @@
 # SDM AEO Reporting — Completion Checklist (updated Oct 30, 2026, 4:20 PM PT)
 
-Repo (public): https://github.com/JamesLFischer/sdm-aeo-reporting · Site: https://jameslfischer.github.io/sdm-aeo-reporting/
+Repo (public): https://github.com/JamesLFischer/data-informata-pro · Site: https://jameslfischer.github.io/data-informata-pro/
 
 ## Done ✅
 - [x] Multi-client runner (`run.sh`, `run_all.sh`) for Gemini / OpenAI / Claude / Perplexity (Perplexity on the new Agent API), with pacing, retries and `--resume`

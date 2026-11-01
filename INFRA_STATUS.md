@@ -8,7 +8,7 @@
 | Month-over-month | ✅ `mom.json` + report section on new runs; site, private dashboard, auto-answers |
 | Filters | ✅ date range + engine applied in site, relay and `/api/context` |
 | Multi-client | ✅ `new_client.sh` → `python3 -m aivis.validate` → `--estimate` → `--limit 2`; live runs refuse invalid configs |
-| Hosted site + chat | ✅ https://jameslfischer.github.io/sdm-aeo-reporting/ via encrypted ntfy relay; clear error states; liveness ping |
+| Hosted site + chat | ✅ https://jameslfischer.github.io/data-informata-pro/ via encrypted ntfy relay; clear error states; liveness ping |
 | Relay ops | ✅ `relay_keepalive.sh` running (60s watchdog, stale-heartbeat restart). ⚠ Not restarted automatically after a box reboot — needs a routine |
 | Questions for Profound Bot | ✅ `./asks.sh pending` (exit 3 when waiting) → `answer` |
 
@@ -58,7 +58,7 @@ Without OpenAI/Anthropic credit, scoring falls back to rule-based (no LLM judge)
 - **Later:** a routine that polls `needs_bot` every N minutes; a protected tunnel (e.g. Cloudflare Access) so James can open it from his laptop; LLM-written answers once OpenAI/Anthropic credit exists; real date-range/engine filtering (they're recorded but not applied yet).
 
 ## Public hosting (Oct 30, 3:50 PM PT)
-- Repo is PUBLIC per James: https://github.com/JamesLFischer/sdm-aeo-reporting. Pages: https://jameslfischer.github.io/sdm-aeo-reporting/
+- Repo is PUBLIC per James: https://github.com/JamesLFischer/data-informata-pro. Pages: https://jameslfischer.github.io/data-informata-pro/
 - `docs/` = public shell + sign-in app (no client data). Client metrics + chat only via the password-gated API (`aivis.server`).
 - Git history squashed to one clean commit before first push; output/, inbox/, private_site/, keys never published.
 - Box needs a tunnel for the public site to reach the API. A quick tunnel's URL changes on restart and stops if the box restarts → a named Cloudflare tunnel on an SDM domain is the durable fix (James: Cloudflare account + domain).
@@ -95,3 +95,4 @@ See COMPLETION_CHECKLIST.md. New: Perplexity baseline runs for all 3 clients ($0
 - Oct 31, 2026 7:40 PM PT: public landing page + sign-in card (docs/index.html). Auth, relay and app behavior unchanged; client-name grep of the public HTML = 0.
 - Oct 31, 2026 7:45 PM PT: rebranded user-facing product to Data Informata Pro (SDM shown only as a 'Built by' credit). Relay and auth unchanged.
 - Oct 31, 2026 7:50 PM PT: user-facing 'Ask Profound Bot' renamed to 'Ask our specialized AI agent'. Answer labels are now 'AI agent (instant)' and 'Specialist analyst'. Internal CLI is unchanged.
+- Oct 31, 2026 7:55 PM PT: repo renamed to JamesLFischer/data-informata-pro. Live at https://jameslfischer.github.io/data-informata-pro/ (the old sdm-aeo-reporting Pages URL now 404s).

@@ -128,8 +128,8 @@ Total is about $3-5 per 25-prompt run, or roughly $6-10 for 50 prompts. Profound
 
 
 ## Public site + authenticated app (current setup)
-- **Repo (public):** https://github.com/JamesLFischer/sdm-aeo-reporting — code, configs template, and a public shell site only.
-- **Public site:** https://jameslfischer.github.io/sdm-aeo-reporting/ (GitHub Pages from `main` /docs). Visitors see only the marketing/sign-in shell.
+- **Repo (public):** https://github.com/JamesLFischer/data-informata-pro — code, configs template, and a public shell site only.
+- **Public site:** https://jameslfischer.github.io/data-informata-pro/ (GitHub Pages from `main` /docs). Visitors see only the marketing/sign-in shell.
 - **Never in git:** `.env`, keys, `output/` (run data), `inbox/` (questions), `private_site/` (built client dashboards), `AVORIO_PROFOUND_HISTORY.md`. History was rebuilt before the first push, so none of these were ever published.
 
 ### How sign-in and chat work (live)
