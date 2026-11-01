@@ -197,3 +197,12 @@ The sticky navy nav's "Client team sign in" button scrolls to the sign-in card a
 
 ## Product name: Data Informata Pro (Oct 31, 2026)
 The user-facing product is **Data Informata Pro**. This covers the title, nav, hero, sign-in card, footer, offline message and the Written report title block ("Prepared by Data Informata Pro"). Seattle Digital Marketing appears only as the footer credit "Built by Seattle Digital Marketing". The repo name and internal CLI (`aivis`) are unchanged.
+
+## Plain-English glossary (Oct 31, 2026)
+A 29-term searchable glossary modal (Share of Model, Share of Voice, engines, AI Overviews, citations, sentiment, MoM, etc.). Where to find it:
+- the "📖 What do these terms mean?" link under the sign-in card;
+- "Glossary" in the public nav;
+- "📖 Terms explained" in the signed-in top bar;
+- a link at the top of each Visual report.
+
+It is also printed as an appendix in every Written report. Terms are defined in `docs/index.html`; examples are generic, with no client names.

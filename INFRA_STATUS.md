@@ -96,3 +96,4 @@ See COMPLETION_CHECKLIST.md. New: Perplexity baseline runs for all 3 clients ($0
 - Oct 31, 2026 7:45 PM PT: rebranded user-facing product to Data Informata Pro (SDM shown only as a 'Built by' credit). Relay and auth unchanged.
 - Oct 31, 2026 7:50 PM PT: user-facing 'Ask Profound Bot' renamed to 'Ask our specialized AI agent'. Answer labels are now 'AI agent (instant)' and 'Specialist analyst'. Internal CLI is unchanged.
 - Oct 31, 2026 7:55 PM PT: repo renamed to JamesLFischer/data-informata-pro. Live at https://jameslfischer.github.io/data-informata-pro/ (the old sdm-aeo-reporting Pages URL now 404s).
+- Oct 31, 2026 8:15 PM PT: plain-English glossary added (modal + Written report appendix).
