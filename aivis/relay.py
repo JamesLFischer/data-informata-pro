@@ -38,6 +38,12 @@ def handle(req):
         from . import project; return project.projects()
     if p == "project":
         from . import project; return project.build(b.get("client"), b.get("engines"))
+    if p == "workspaces":
+        from . import workspaces; return workspaces.listing()
+    if p == "workspace_add":
+        from . import workspaces; return workspaces.add(b.get("name"))
+    if p == "workspace_move":
+        from . import workspaces; return workspaces.move(b.get("client"), b.get("to"))
     if p == "clients": return asks.clients()
     if p == "context": return asks.context(b.get("client", ""), b.get("date_from") or None, b.get("date_to") or None, b.get("engines") or None)
     if p == "asks": return [x for x in asks.load_all() if x["client"] == b.get("client")][-30:]
