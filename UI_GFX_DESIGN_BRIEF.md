@@ -50,7 +50,7 @@ From James's ChatGPT history (`/workspace/chatgpt/profound_chats.txt`) and the A
   1. **Overview:** KPI tiles (SoM per engine, unbranded discovery, branded sentiment, own-site citations), filters, the metrics table, MoM and history.
   2. **Visual report:** see section 4.
   3. **Written report:** see section 5.
-  4. **Ask Profound Bot:** project-scoped Q&A over the encrypted relay. Instant answers come from data, and judgment questions are queued.
+  4. **Ask our specialized AI agent:** project-scoped Q&A over the encrypted relay. Instant answers come from data, and judgment questions are queued.
 - Routes are `#/p/<slug>/<tab>`. Stale data is cleared on project switch, with skeleton loading.
 
 ## 4. Charts that beat Profound's single-score widgets

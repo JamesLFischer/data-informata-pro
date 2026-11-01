@@ -153,7 +153,7 @@ After sign-in, the home page lists one **project card per client** (`configs/*.y
 - **Overview**: KPIs (SoM by engine, unbranded inclusion, branded sentiment, own-site citations), filters, the full metrics, MoM and history.
 - **Visual report**: SoM by engine; unbranded vs branded; inclusion by topic cluster; competitive SOV; SoM trend (SVG); most-cited sources; opportunities/wins; measurement cost.
 - **Written report**: a client-ready monthly narrative generated from real run data (`aivis/project.py: narrative`). It is printable to PDF.
-- **Ask Profound Bot**: the encrypted ask/answer loop, scoped to the project.
+- **Ask our specialized AI agent** (internally answered by Profound Bot): the encrypted ask/answer loop, scoped to the project.
 Backend: relay paths `projects` and `project` → `aivis/project.py`. A new client only needs `./new_client.sh <slug>` plus a run.
 
 ## Profound-parity tracking (Jones Firm, Canycom)
@@ -188,7 +188,7 @@ The pre-auth page is now an Data Informata Pro landing page with these sections:
 - Hero, with the team sign-in card
 - Illustrative sample dashboard (sample data only)
 - Who we are
-- The platform: Projects, Visual and Written reports, Ask Profound Bot
+- The platform: Projects, Visual and Written reports, Ask our specialized AI agent
 - How it works
 - Engines covered
 - CTA band

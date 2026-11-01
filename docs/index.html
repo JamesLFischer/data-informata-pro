@@ -78,7 +78,7 @@ footer{text-align:center;color:var(--mut);font-size:13px;padding:30px 0 10px}
 <div class=fc><div class=fi>▦</div><h3>Projects per client</h3><p>Each client has its own project, with a locked battery of buyer-intent questions, tracked competitors and a full run history.</p></div>
 <div class=fc><div class=fi>◔</div><h3>Visual reports</h3><p>Share of Model by engine, annotated trends, competitor share of voice, topic heatmaps, citation source mix, an opportunity matrix and prompt-level results.</p></div>
 <div class=fc><div class=fi>¶</div><h3>Written reports</h3><p>A client-ready monthly narrative covering what moved, why it matters and what to do next. Print or save as PDF.</p></div>
-<div class=fc><div class=fi>✦</div><h3>Ask Profound Bot</h3><p>Ask questions about any project from inside the dashboard. Data questions are answered instantly; strategy questions go to an analyst.</p></div></div></section>
+<div class=fc><div class=fi>✦</div><h3>Ask our specialized AI agent</h3><p>Ask questions about any project from inside the dashboard. Data questions are answered instantly; strategy questions go to an analyst.</p></div></div></section>
 <section id=how class=sec><div class=sh><span class=eyebrow>How it works</span><h2>Measure → understand → act → re-measure</h2></div><div class=steps>
 <div><b>1</b><h3>Lock the questions</h3><p>Unbranded discovery and branded reputation questions that real buyers ask, held constant for clean comparisons.</p></div>
 <div><b>2</b><h3>Ask every engine</h3><p>Each question goes fresh to each AI engine. Results are reported per engine, never blended.</p></div>
@@ -92,13 +92,13 @@ footer{text-align:center;color:var(--mut);font-size:13px;padding:30px 0 10px}
 <div class="card topbar"><a href="#/" id=homelink>All projects</a> <select id=client class=hide></select><small id=stat></small><span class=sp></span><span id=conn class=pill>…</span> <button id=logout>Sign out</button></div>
 <div id=home><div class=sect><h2>Client projects</h2><small>Share of Model across AI answer engines · latest measured run</small></div><div id=cards class=grid></div></div>
 <div id=proj class=hide><div class="card phead" id=phead></div>
-<div class=tabs><a data-t=overview>Overview</a><a data-t=visual>Visual report</a><a data-t=written>Written report</a><a data-t=ask>Ask Profound Bot</a></div>
+<div class=tabs><a data-t=overview>Overview</a><a data-t=visual>Visual report</a><a data-t=written>Written report</a><a data-t=ask>Ask our AI agent</a></div>
 <div class=pane id=t-overview><div class=card><b>Filters</b> <label>From <input type=date id=ffrom></label><label>To <input type=date id=fto></label><span id=fengs></span>
 <button id=fapply>Apply</button> <button id=freset>Reset</button><br><small id=fnote>Filters apply to metrics, history, month-over-month and to questions you ask.</small></div>
 <div class=card id=ovx></div><div class=card id=metrics></div></div>
 <div class=pane id=t-visual><div id=vis></div></div>
 <div class=pane id=t-written><div class=card id=wr></div></div>
-<div class=pane id=t-ask><div class=card><h2>Ask Profound Bot about this project</h2><p><small>You get an instant answer built only from this project's real run files. Questions that need judgment are queued for Profound Bot, whose reply appears here.</small></p>
+<div class=pane id=t-ask><div class=card><h2>Ask our specialized AI agent about this project</h2><p><small>You get an instant answer built only from this project's real run files. Questions that need strategic judgment go to a specialist analyst, whose reply appears here.</small></p>
 <textarea id=aq rows=3 style="width:100%;margin-top:8px" placeholder="How is this client doing vs competitors? What should we publish next?"></textarea><button id=asend>Ask</button> <small id=aerr class=err></small><div id=alist></div></div></div>
 </div></div>
 </main><script>
@@ -137,7 +137,7 @@ async function ping(){var id=rid(),w=waitTopic(R.channel+"-pong-"+id,12000,funct
 function setConn(k,t){var c=$("conn");c.className="pill "+(k=="ok"?"ok":k=="warn"?"warn":"bad");c.textContent=t||(k=="ok"?"box online":k=="warn"?"reconnecting…":"box offline")}
 async function explain(e){if(e&&e.kind=="rate")return "Relay is rate-limiting this browser (too many requests). Wait about a minute and try again.";
  var up=false;try{up=await ping()}catch(x){if(x.kind=="rate")return "Relay is rate-limiting this browser. Wait about a minute."}
- return up?null:"The Data Informata Pro server is offline (relay worker not answering). It usually restarts within 2 minutes; if not, ask Profound Bot to run ./relay_watchdog.sh."}
+ return up?null:"The Data Informata Pro server is offline (relay worker not answering). It usually restarts within 2 minutes; if not, contact your account team."}
 async function api(path,body){try{return await relay(path,body)}catch(e){if(e.kind=="rate"){setConn("warn","rate-limited");throw e}
   setConn("warn");try{return await relay(path,body)}catch(e2){var why=await explain(e2);setConn(why&&!/rate/.test(why)?"bad":"warn");e2.why=why||"Request timed out; the box is online, so please retry.";throw e2}}}
 function tbl(rows){if(!rows||!rows.length)return "<p><small>none</small></p>";var k=Object.keys(rows[0]);
@@ -163,7 +163,7 @@ function load(){if(!$("client").value)return;var slug=cur();PJ[$("client").value
  loadAsks()}
 function loadAsks(){var slug=cur();if(!slug)return Promise.resolve();return api("asks",{client:slug}).then(function(xs){if(slug!=cur())return;POLL=30000;$("alist").innerHTML=xs.reverse().map(function(x){
   return "<div style='border-top:1px solid #ddd;margin-top:8px'><p><b>"+esc(x.question)+"</b> <span class=tag>"+esc(x.status)+"</span></p>"+
-  x.answers.map(function(a){return "<p><small>"+esc(a.by)+" · "+esc(a.at)+"</small><br>"+esc(a.text).replace(/\n/g,"<br>")+"</p>"}).join("")+"</div>"}).join("")})
+  x.answers.map(function(a){return "<p><small>"+esc(({"Profound Bot":"Specialist analyst","auto (artifacts)":"AI agent (instant)"})[a.by]||a.by)+" · "+esc(a.at)+"</small><br>"+esc(a.text).replace(/\n/g,"<br>")+"</p>"}).join("")+"</div>"}).join("")})
   .catch(function(e){POLL=Math.min(POLL*2,300000);$("stat").textContent=(e.why||"could not refresh answers")+" Retrying in "+Math.round(POLL/1000)+"s."})}
 function schedule(){clearTimeout(pollT);pollT=setTimeout(function(){(KEY&&!document.hidden?loadAsks():Promise.resolve()).then(schedule,schedule)},POLL)}
 document.addEventListener("visibilitychange",function(){if(!document.hidden&&KEY){loadAsks();schedule()}});
@@ -208,7 +208,7 @@ function cards(ps){$("cards").innerHTML=ps.map(function(p){var som=p.som||{},es=
  return "<a class=pcard href='#/p/"+esc(p.client)+"/overview' style='--bc:"+esc(c)+"'><h3>"+esc(p.brand)+"</h3><small>"+esc(p.domain)+"</small>"+
  "<div class=prow>"+ring(v,c,104)+"<div><small style='text-transform:uppercase;letter-spacing:.05em;font-size:11px;font-weight:600'>Share of Model</small><div>"+(es.length?es.map(function(e){return "<div style='margin-top:3px'><b style='font-size:15px'>"+som[e]+"%</b> <small>"+esc(e)+"</small></div>"}).join(""):"<small>No runs yet</small>")+"</div>"+mini(p.trend,c)+"</div></div>"+
  "<div class=pmeta><span class=chip>"+p.prompts+" locked prompts</span><span class=chip>"+p.runs+" run"+(p.runs==1?"":"s")+"</span>"+(p.date?"<span class=chip>Updated "+esc(p.date)+"</span>":"")+(p.unconfirmed&&p.unconfirmed.length?"<span class=chip style='background:#fff4dc;color:#7a5200'>Setup pending</span>":"")+"</div></a>"}).join("")+
- "<div class='pcard pnew'><h3>+ New project</h3><p><small>Ask Profound Bot to onboard a client (<code>./new_client.sh &lt;slug&gt;</code>). It appears here after its first measured run.</small></p></div>"}
+ "<div class='pcard pnew'><h3>+ New project</h3><p><small>Ask our AI agent to onboard a new client. It appears here after its first measured run.</small></p></div>"}
 var PARITY={openai:"ChatGPT",gemini:"Google AI Overviews"};
 function engPanel(o){var E=o.engines||{},es=Object.keys(E),ph=(o.parity_engines||[]).filter(function(p){return !es.some(function(e){return e.toLowerCase()==p})}).map(function(p){return PARITY[p]||p});
  var M=[["som","Share of Model"],["mentions","Mention rate"],["top1","#1 recommendation rate"],["sentiment","Net sentiment"],["fidelity","Citation fidelity"]],cols=es.length+ph.length+1;

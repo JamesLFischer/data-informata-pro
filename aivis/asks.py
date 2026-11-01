@@ -75,7 +75,7 @@ def auto_answer(ask):
         out.append(f"Cost of latest run: ${L['cost']['total_usd']} ({L['cost']['note']})" if "cost" in L else "No cost.json for this run (predates cost tracking).")
     if ctx["unconfirmed"]: out.append("Caveat: unconfirmed config items: " + ", ".join(ctx["unconfirmed"]))
     needs_bot = bool(re.search(r"why|recommend|should|what to do|fix|improve|explain|profound|avorio", q))
-    if needs_bot: out.append("This needs interpretation — flagged for Profound Bot.")
+    if needs_bot: out.append("This needs strategic interpretation. It has been sent to a specialist analyst, whose reply will appear here.")
     return "\n".join(out), needs_bot
 
 def _norm_filters(ask):
@@ -97,7 +97,7 @@ def save(ask):
            "client": ask.get("client", ""), "question": str(ask.get("question", ""))[:2000], "date_range": ask.get("date_range", ""),
            "filters": _norm_filters(ask), "status": "open", "answers": []}
     text, needs = auto_answer(ask)
-    ask["answers"].append({"by": "auto (artifacts)", "at": ask["created"], "text": text})
+    ask["answers"].append({"by": "AI agent (instant)", "at": ask["created"], "text": text})
     ask["status"] = "needs_bot" if needs else "answered"
     json.dump(ask, open(os.path.join(INBOX, ask["id"] + ".json"), "w"), indent=1); return ask
 
@@ -115,7 +115,7 @@ def main(a=sys.argv[1:]):
     elif cmd == "context": print(json.dumps(context(a[1]), indent=1))
     elif cmd == "answer":
         p = os.path.join(INBOX, a[1] + ".json"); x = json.load(open(p))
-        x["answers"].append({"by": "Profound Bot", "at": datetime.datetime.now().isoformat(timespec="seconds"), "text": a[2]}); x["status"] = "answered"
+        x["answers"].append({"by": "Specialist analyst", "at": datetime.datetime.now().isoformat(timespec="seconds"), "text": a[2]}); x["status"] = "answered"
         json.dump(x, open(p, "w"), indent=1); print("answered", a[1])
     elif cmd == "ask": print(json.dumps(save({"client": a[1], "question": a[2]}), indent=1))
     else: print(__doc__)
