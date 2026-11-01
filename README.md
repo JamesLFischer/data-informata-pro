@@ -182,3 +182,15 @@ See `UI_GFX_DESIGN_BRIEF.md`.
 - **Visual report:** headline callouts, engine comparison panel (ChatGPT/AIO awaiting activation), annotated SoM trend, discovery vs recognition rings, topic × engine heatmap, competitive SOV, "who appears instead", citation source mix and top domains, opportunity matrix with priority table, win excerpts, and a filterable prompt-level matrix.
 - **Written report:** 8-section narrative with contents and print styling.
 - **Backend:** `aivis/project.py` adds the prompt matrix, source mix, competitors named instead, opportunities, wins and trend annotations.
+
+## Public landing + sign-in (Oct 31, 2026)
+The pre-auth page is now an SDM landing page with these sections:
+- Hero, with the team sign-in card
+- Illustrative sample dashboard (sample data only)
+- Who we are
+- The platform: Projects, Visual and Written reports, Ask Profound Bot
+- How it works
+- Engines covered
+- CTA band
+
+The sticky navy nav's "Client team sign in" button scrolls to the sign-in card and focuses the password field. After sign-in, the marketing nav and sections hide and the Projects app loads unchanged; Sign out returns to the landing page. No client names or metrics appear in the public HTML.

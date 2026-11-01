@@ -92,3 +92,4 @@ See COMPLETION_CHECKLIST.md. New: Perplexity baseline runs for all 3 clients ($0
 - jonesfirm/canycom are locked at 42 prompts (v2). Perplexity runs completed at 4:09–4:10 PM PT: Jones Firm SoM 45.2%, Canycom 40.7%. Incremental cost was about $0.06.
 - Oct 31, 2026 7:10 PM PT: UI/graphics refresh (docs/index.html). project.summary now carries a sparkline trend; relay restarted and connected.
 - Oct 31, 2026 7:25 PM PT: report v3 (UI_GFX_DESIGN_BRIEF.md). project.py detail layer added; relay restarted and connected.
+- Oct 31, 2026 7:40 PM PT: public landing page + sign-in card (docs/index.html). Auth, relay and app behavior unchanged; client-name grep of the public HTML = 0.
