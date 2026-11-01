@@ -176,3 +176,9 @@ New design system for the dashboard:
 - Written report has a document-style layout with print CSS.
 - Loading states use skeletons.
 - Everything is pure inline SVG/CSS, with no external libraries.
+
+## Visual + Written report v3 (Oct 31, 2026)
+See `UI_GFX_DESIGN_BRIEF.md`.
+- **Visual report:** headline callouts, engine comparison panel (ChatGPT/AIO awaiting activation), annotated SoM trend, discovery vs recognition rings, topic × engine heatmap, competitive SOV, "who appears instead", citation source mix and top domains, opportunity matrix with priority table, win excerpts, and a filterable prompt-level matrix.
+- **Written report:** 8-section narrative with contents and print styling.
+- **Backend:** `aivis/project.py` adds the prompt matrix, source mix, competitors named instead, opportunities, wins and trend annotations.
